@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI vs ML vs Deep Learning — Mind Map</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f3ef;min-height:100vh;padding:24px;color:#2c2c2a}
+  .page{max-width:860px;margin:0 auto}
+  .header{background:linear-gradient(135deg,#534AB7 0%,#7F77DD 100%);border-radius:14px;padding:18px 24px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px rgba(83,74,183,.25)}
+  .header-title{font-size:22px;font-weight:700;color:#EEEDFE;letter-spacing:-.3px}
+  .header-sub{font-size:12px;color:#CECBF6;margin-top:3px}
+  .header-badge{background:rgba(0,0,0,.2);color:#CECBF6;border-radius:8px;padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:.4px}
+  .zone-ai{border:2px solid #534AB7;border-radius:16px;padding:16px;background:#EEEDFE;position:relative}
+  .zone-ml{border:1.5px solid #185FA5;border-radius:13px;padding:14px;background:#E6F1FB;margin-top:4px}
+  .zone-dl{border:1.5px solid #0F6E56;border-radius:11px;padding:13px;background:#E1F5EE;margin-top:4px}
+  .zone-label{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .badge{display:inline-block;padding:5px 16px;border-radius:8px;font-size:13px;font-weight:700;letter-spacing:-.1px}
+  .badge-ai{background:#534AB7;color:#EEEDFE}
+  .badge-ml{background:#185FA5;color:#E6F1FB}
+  .badge-dl{background:#0F6E56;color:#E1F5EE}
+  .zone-desc{font-size:12px;font-weight:500}
+  .desc-ai{color:#3C3489}
+  .desc-ml{color:#0C447C}
+  .desc-dl{color:#085041}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .tag{display:inline-block;padding:4px 11px;border-radius:10px;font-size:11px;font-weight:600}
+  .tag-ai{background:#CECBF6;color:#26215C}
+  .tag-ml{background:#B5D4F4;color:#042C53}
+  .tag-dl{background:#9FE1CB;color:#04342C}
+  .tag-warn{background:#F5C4B3;color:#4A1B0C;border:1px solid #993C1D}
+  .tag-gray{background:#D3D1C7;color:#2C2C2A}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .card{border-radius:9px;padding:11px 13px}
+  .card-ml{background:#D8E9FA;border:1px solid #185FA5}
+  .card-dl{background:#B8EDD9;border:1px solid #0F6E56}
+  .card-title{font-size:11px;font-weight:700;margin-bottom:7px;letter-spacing:.1px}
+  .card-title-ml{color:#0C447C}
+  .card-title-dl{color:#04342C}
+  .item{display:flex;gap:8px;font-size:12px;margin-bottom:5px;line-height:1.5;align-items:flex-start}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;margin-top:4px}
+  .section-label{font-size:10px;font-weight:700;letter-spacing:.8px;color:#5F5E5A;margin-bottom:8px;text-transform:uppercase}
+  .comparison{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .comp-card{border-radius:11px;padding:13px}
+  .comp-dl{background:#E1F5EE;border:2px solid #0F6E56}
+  .comp-ml{background:#E6F1FB;border:2px solid #185FA5}
+  .comp-title{font-size:12px;font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .comp-title-dl{color:#085041}
+  .comp-title-ml{color:#0C447C}
+  .pill{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700}
+  .pill-dl{background:#1D9E75;color:#E1F5EE}
+  .pill-ml{background:#378ADD;color:#E6F1FB}
+  .icon-strip{display:flex;gap:4px;margin-bottom:6px}
+  .icon-box{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .watermark{text-align:center;font-size:10px;color:#888780;margin-top:18px;letter-spacing:.3px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div>
+    <div class="header-title">AI vs ML vs Deep Learning</div>
+    <div class="header-sub">Structural hierarchy of intelligent systems</div>
+  </div>
+</div>
+
+<div class="zone-ai">
+  <div class="zone-label">
+    <span class="badge badge-ai">★ Artificial Intelligence</span>
+    <span class="zone-desc desc-ai">Umbrella concept — making machines simulate human capabilities</span>
+  </div>
+  <div class="tags">
+    <span class="tag tag-ai">Expert Systems</span>
+    <span class="tag tag-ai">Symbolic AI</span>
+    <span class="tag tag-ai">Rule-based decisions</span>
+    <span class="tag tag-ai">Chess-playing programs (1950s)</span>
+    <span class="tag tag-ai">Hard-coded logic trees</span>
+    <span class="tag tag-warn">⚠ Pitfall — failed at image recognition</span>
+    <span class="tag tag-warn">⚠ Cannot handle real-world variation</span>
+  </div>
+
+  <div class="zone-ml">
+    <div class="zone-label">
+      <span class="badge badge-ml">▶ Machine Learning</span>
+      <span class="zone-desc desc-ml">Statistical pattern learning — algorithms find patterns in data</span>
+    </div>
+    <div class="tags">
+      <span class="tag tag-ml">Regression</span>
+      <span class="tag tag-ml">Classification</span>
+      <span class="tag tag-ml">Clustering</span>
+      <span class="tag tag-ml">Learns from labeled examples</span>
+      <span class="tag tag-ml">No explicit rule programming</span>
+      <span class="tag tag-ml">Provide data → algorithm learns</span>
+    </div>
+
+    <div class="zone-dl">
+      <div class="zone-label">
+        <span class="badge badge-dl">◆ Deep Learning</span>
+        <span class="zone-desc desc-dl">Neural networks — automated multi-layer feature learning</span>
+      </div>
+      <div class="tags">
+        <span class="tag tag-dl">Automated feature extraction</span>
+        <span class="tag tag-dl">Multiple hidden layers</span>
+        <span class="tag tag-dl">Images · Text · Audio · Video</span>
+        <span class="tag tag-dl">Scales with data volume</span>
+        <span class="tag tag-dl">Brain-inspired (mathematical model)</span>
+        <span class="tag tag-dl">GPT · CNNs · RNNs · Transformers</span>
+      </div>
+
+      <div class="g2">
+        <div class="card card-ml">
+          <div class="card-title card-title-ml">Traditional ML — Manual Features</div>
+          <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Engineers manually define features: ear shape, color, size, texture</span></div>
+          <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Works well with structured tabular data</span></div>
+          <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Fast to train, highly interpretable</span></div>
+          <div class="item"><div class="dot" style="background:#D85A30"></div><span style="color:#712B13">Struggles with raw pixels, waveforms, raw text</span></div>
+        </div>
+        <div class="card card-dl">
+          <div class="card-title card-title-dl">Deep Learning — Auto Features</div>
+          <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#04342C">Model discovers features automatically from raw data (pixels, characters)</span></div>
+          <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#04342C">Performance improves as data volume and layer depth increase</span></div>
+          <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#04342C">Eliminates hand-crafted feature engineering entirely</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="comparison">
+  <div class="comp-card comp-dl">
+    <div class="comp-title comp-title-dl"><span class="pill pill-dl">DL</span> Use Deep Learning when...</div>
+    <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041">Millions of training samples available</span></div>
+    <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041">Complex unstructured data — images, audio, natural language</span></div>
+    <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041">High compute resources (GPUs / TPUs) available</span></div>
+    <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041">Model interpretability is not a hard requirement</span></div>
+    <div class="item"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041">State-of-the-art accuracy is the primary goal</span></div>
+  </div>
+  <div class="comp-card comp-ml">
+    <div class="comp-title comp-title-ml"><span class="pill pill-ml">ML</span> Use Machine Learning when...</div>
+    <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Smaller or structured tabular datasets</span></div>
+    <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Model interpretability required — healthcare, finance, legal</span></div>
+    <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Limited compute budget or fast inference needed</span></div>
+    <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">Features are already well-defined and understood</span></div>
+    <div class="item"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C">DL adds complexity without meaningful accuracy gain</span></div>
+  </div>
+</div>
+
+<div class="watermark">AI vs ML vs DL — Quick Revision Guide</div>
+</div>
+</body>
+</html>
