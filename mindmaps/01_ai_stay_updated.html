@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stay Updated in AI Without Burning Out</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ── PAGE-SPECIFIC AURORA POSITIONS & COLOURS ── */
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#E8620A,transparent 70%);top:-80px;left:-100px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#1A52C8,transparent 70%);top:35%;right:-150px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#0A7A6A,transparent 70%);bottom:-80px;left:35%}
+
+/* Badge */
+.mm-badge{background:linear-gradient(135deg,var(--gr-bg),#F0FBF6);border-color:var(--gr-b);color:var(--gr)}
+.mm-dot  {background:var(--gr)} .mm-dot::after{border-color:var(--gr)}
+
+/* H1 gradient */
+.mm-header h1{background-image:linear-gradient(135deg,var(--or) 0%,var(--am) 28%,var(--te) 58%,var(--bl) 100%)}
+
+/* KPI accents */
+.mm-kpi:nth-child(1){--kpi-accent:var(--gr)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--am)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--bl)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--ro)}
+
+/* Mindset chip accents */
+.mc-1{--chip-bg:var(--gr-bg);--chip-border:var(--gr-b);--chip-color:var(--gr)}
+.mc-2{--chip-bg:var(--am-bg);--chip-border:var(--am-b);--chip-color:var(--am)}
+.mc-3{--chip-bg:var(--or-bg);--chip-border:var(--or-b);--chip-color:var(--or)}
+.mc-1:hover{box-shadow:0 10px 26px rgba(24,122,58,.18);border-color:var(--gr)!important}
+.mc-2:hover{box-shadow:0 10px 26px rgba(192,123,0,.18);border-color:var(--am)!important}
+.mc-3:hover{box-shadow:0 10px 26px rgba(232,98,10,.18);border-color:var(--or)!important}
+.mc-1 .chip-label{color:var(--gr)}.mc-2 .chip-label{color:var(--am)}.mc-3 .chip-label{color:var(--or)}
+
+/* Card accents via CSS custom props */
+.c-re{--c-accent:var(--re);--c-bg:var(--re-bg);--c-border:var(--re-b);--c-shadow:rgba(184,24,54,.18)}
+.c-gr{--c-accent:var(--gr);--c-bg:var(--gr-bg);--c-border:var(--gr-b);--c-shadow:rgba(24,122,58,.18)}
+.c-vi{--c-accent:var(--vi);--c-bg:var(--vi-bg);--c-border:var(--vi-b);--c-shadow:rgba(107,63,212,.18)}
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-or{--c-accent:var(--or);--c-bg:var(--or-bg);--c-border:var(--or-b);--c-shadow:rgba(232,98,10,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+
+/* Flow colours */
+.mm-flow-or{--flow-color:var(--or);--flow-color2:var(--am);--flow-border:var(--or-b);--flow-shadow:rgba(232,98,10,.15);--flow-num-bg:var(--or-bg);--flow-num-border:var(--or-b)}
+.mm-flow-or .mm-dash{stroke:var(--or)} .mm-flow-or .mm-arrowhead{fill:var(--or)} .mm-flow-or .mm-traveldot{fill:var(--or)} .mm-flow-or .mm-step-num{color:var(--or)}
+
+/* Nested compare boxes */
+.cbox{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:13px;transition:transform .3s,box-shadow .3s}
+.cbox:hover{transform:translateY(-3px)}.cbox:nth-child(1){border-color:var(--bl-b)}.cbox:nth-child(1):hover{box-shadow:0 6px 18px rgba(26,82,200,.15)}.cbox:nth-child(2){border-color:var(--te-b)}.cbox:nth-child(2):hover{box-shadow:0 6px 18px rgba(10,122,106,.15)}
+.cbox-ico{font-size:18px;margin-bottom:5px}.cbox-title{font-size:11px;font-weight:700;margin-bottom:4px}
+.cbox:nth-child(1) .cbox-title{color:var(--bl)}.cbox:nth-child(2) .cbox-title{color:var(--te)}
+.cbox-desc{font-size:10.5px;color:var(--muted);line-height:1.45}
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="aurora">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <!-- HEADER -->
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>AI Learning System</div>
+    <h1>Stay Updated in AI<br>Without Burning Out</h1>
+    <p>Signal over noise · Fundamentals over hype · 1% daily improvement over information overload</p>
+  </div>
+
+  <!-- KPIs -->
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val">1%</div><div class="mm-kpi-label">Daily improvement<br>target — not 100%</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val">2wk</div><div class="mm-kpi-label">Wait before trying<br>new AI tools (rule)</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="5">0</div><div class="mm-kpi-label">Trusted sources<br>max to follow</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="0">0</div><div class="mm-kpi-label">Passive scroll<br>sessions to tolerate</div></div>
+  </div>
+
+  <!-- MINDSET CHIPS -->
+  <div class="mm-chips">
+    <div class="mm-chip mc-1"><span class="chip-icon">🏁</span><div class="chip-label">You Are Not Late</div><div class="chip-desc">The AI field is massive. Nobody knows everything. You haven't missed the boat.</div></div>
+    <div class="mm-chip mc-2"><span class="chip-icon">📈</span><div class="chip-label">1% Daily System</div><div class="chip-desc">Compound growth beats frantic consumption. Consistency wins over intensity.</div></div>
+    <div class="mm-chip mc-3"><span class="chip-icon">🎯</span><div class="chip-label">Signal Over Noise</div><div class="chip-desc">Most AI "news" is marketing. Filter ruthlessly and act on what remains.</div></div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="mm-grid">
+
+    <!-- Noise Sources -->
+    <div class="mm-card c-re">
+      <div class="mm-card-head"><div class="mm-card-ico">🚨</div><div><div class="mm-card-title">Noise Sources to Avoid</div><div class="mm-card-subtitle">Identify & eliminate from your feed</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✕</div><span><b>LinkedIn / Instagram AI posts</b> — high-noise, engagement-bait, rarely actionable</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✕</div><span><b>Founder-led hype</b> — creators with something to sell inflate capabilities</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✕</div><span><b>Marketing clickbait</b> — "AI will replace you in 30 days!" fear-based headlines</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✕</div><span><b>Course FOMO</b> — urgency tactics designed to make you feel behind</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✕</div><span><b>Hype-cycle tools</b> — viral tools that disappear in 2 weeks → ignore initially</span></div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-ro">📢 Hype Cycle</span>
+        <span class="mm-tag mm-tag-ro">😨 FOMO</span>
+        <span class="mm-tag mm-tag-ro">🎣 Clickbait</span>
+        <span class="mm-tag mm-tag-am">📱 Passive Scroll</span>
+      </div>
+    </div>
+
+    <!-- Proactive System -->
+    <div class="mm-card c-gr">
+      <div class="mm-card-head"><div class="mm-card-ico">⚡</div><div><div class="mm-card-title">The Proactive Learning System</div><div class="mm-card-subtitle">Active > Passive. Always.</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Hands-on exploration</b> — test new tools personally instead of watching demos</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Document your learnings</b> — write notes, build prototypes, solidify understanding</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Scheduled learning blocks</b> — fixed weekly time for AI, not random scrolling</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Build things</b> — implementation creates 10× more understanding than reading alone</span></div>
+      </div>
+      <div class="mm-rule">
+        <div class="mm-rule-icon">⏳</div>
+        <div><div class="mm-rule-title">⭐ THE TWO-WEEK RULE</div><div class="mm-rule-body">When a new AI tool goes viral, <strong>wait two weeks</strong>. Still relevant after two weeks? Worth your time. Vanished? You saved hours.</div></div>
+      </div>
+    </div>
+
+    <!-- Fundamentals -->
+    <div class="mm-card c-vi">
+      <div class="mm-card-head"><div class="mm-card-ico">🏛️</div><div><div class="mm-card-title">Build Strong Fundamentals First</div><div class="mm-card-subtitle">Core knowledge contextualises every new development</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">1</div><span><b>How LLMs actually work</b> — attention, tokens, training objectives, RLHF</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">2</div><span><b>History of deep learning</b> — AlexNet → GANs → Transformers → GPT milestones</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">3</div><span><b>AI system architecture layers</b> — full stack from data to inference</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">4</div><span><b>Core ML concepts</b> — gradient descent, overfitting, embeddings, fine-tuning, RAG</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">5</div><span><b>Contextualise new releases</b> — solid fundamentals let you instantly see what's truly new</span></div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-vi">🧮 LLM Architecture</span>
+        <span class="mm-tag mm-tag-vi">📜 DL History</span>
+        <span class="mm-tag mm-tag-vi">🔧 Core ML</span>
+      </div>
+    </div>
+
+    <!-- Signal Sources -->
+    <div class="mm-card c-bl">
+      <div class="mm-card-head"><div class="mm-card-ico">📡</div><div><div class="mm-card-title">Curated Signal Sources</div><div class="mm-card-subtitle">Follow few, follow deeply — quality over quantity</div></div></div>
+      <div class="mm-compare">
+        <div class="cbox"><div class="cbox-ico">𝕏</div><div class="cbox-title">Researchers on X</div><div class="cbox-desc">Follow 5–8 AI researchers, not influencers. Primary sources beat summaries.</div></div>
+        <div class="cbox"><div class="cbox-ico">▶️</div><div class="cbox-title">YouTube Channels</div><div class="cbox-desc">2–3 channels known for technical depth, not hot takes.</div></div>
+        <div class="cbox"><div class="cbox-ico">📧</div><div class="cbox-title">Newsletters</div><div class="cbox-desc">1–2 curated AI newsletters that filter the week's actual signal.</div></div>
+        <div class="cbox"><div class="cbox-ico">📝</div><div class="cbox-title">Substack Blogs</div><div class="cbox-desc">Deep-dive essays from practitioners — long reads weekly beats daily skimming.</div></div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-bl">🎯 3–5 Sources Max</span>
+        <span class="mm-tag mm-tag-bl">📰 Primary Sources</span>
+        <span class="mm-tag mm-tag-te">🔬 Research Papers</span>
+      </div>
+    </div>
+
+    <!-- WORKFLOW FLOW -->
+    <div class="mm-card c-or mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🔄</div><div><div class="mm-card-title">Daily / Weekly Workflow — The Sustainable System</div><div class="mm-card-subtitle">A repeatable process that compounds over time without burning out</div></div></div>
+      <div class="mm-flow mm-flow-or">
+        <div class="mm-step"><div class="mm-step-num">01</div><div class="mm-step-ico">🧘</div><div class="mm-step-lbl">Mindset Check</div><div class="mm-step-sub">You are not late</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#a1w"/></animateMotion></circle><path id="a1w" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">02</div><div class="mm-step-ico">🔍</div><div class="mm-step-lbl">Filter Inbox</div><div class="mm-step-sub">Signal vs Noise</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#a2w"/></animateMotion></circle><path id="a2w" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">03</div><div class="mm-step-ico">⏳</div><div class="mm-step-lbl">2-Week Rule</div><div class="mm-step-sub">New tools filter</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#a3w"/></animateMotion></circle><path id="a3w" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">04</div><div class="mm-step-ico">🛠️</div><div class="mm-step-lbl">Hands-On Test</div><div class="mm-step-sub">Build, don't just read</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#a4w"/></animateMotion></circle><path id="a4w" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">05</div><div class="mm-step-ico">📓</div><div class="mm-step-lbl">Document It</div><div class="mm-step-sub">Notes → retention</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#a5w"/></animateMotion></circle><path id="a5w" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">06</div><div class="mm-step-ico">🏛️</div><div class="mm-step-lbl">Tie to Fundamentals</div><div class="mm-step-sub">Context → insight</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.7s"><mpath href="#a6w"/></animateMotion></circle><path id="a6w" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">07</div><div class="mm-step-ico">📈</div><div class="mm-step-lbl">+1% Better</div><div class="mm-step-sub">Compound daily</div></div>
+      </div>
+    </div>
+
+    <!-- Pitfalls -->
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">⚠️</div><div><div class="mm-card-title">Common Pitfalls</div><div class="mm-card-subtitle">What causes burnout & information overload</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Trying to read everything</b> — 100s of papers daily. Impossible target = guaranteed burnout.</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Chasing every new model</b> — GPT-5, Claude, Gemini… evaluating each is a full-time job.</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Comparing to Twitter highlights</b> — you only see others' wins, not their hours of struggle.</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>No system → random consumption</b> — without a rhythm, learning is reactive and forgettable.</span></div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-ro">🔥 Burnout Risk</span>
+        <span class="mm-tag mm-tag-ro">😵 Info Overload</span>
+        <span class="mm-tag mm-tag-am">📊 Comparison Trap</span>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="mm-card c-te">
+      <div class="mm-card-head"><div class="mm-card-ico">📊</div><div><div class="mm-card-title">Key Metrics of a Healthy System</div><div class="mm-card-subtitle">Track these to measure sustainable learning</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Things built this week</b> — the primary output metric of genuine learning</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Concepts you can explain</b> — if you can't explain it simply, you don't know it yet</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Tools tested personally</b> — hands-on > watched demo. Count only direct testing.</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Noise sources eliminated</b> — actively prune your feed. Less in = better signal/noise.</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Energy level after learning</b> — healthy system leaves you energised, not drained.</span></div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-te">🏗️ Build Rate</span>
+        <span class="mm-tag mm-tag-te">💡 Clarity Score</span>
+        <span class="mm-tag mm-tag-gr">⚡ Energy Check</span>
+      </div>
+    </div>
+
+  </div><!-- /mm-grid -->
+</div><!-- /mm-page -->
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['1%', 'LLM', 'RAG', 'ctx', '→', '[]', 'SDD', '∞', 'fn()', 'tok'],
+    [22, 38, 130, 165, 210, 270]
+  );
+</script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Custom Slash Commands</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#1A52C8,transparent 70%);top:-80px;left:-80px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#0A7A6A,transparent 70%);top:40%;right:-120px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#C07B00,transparent 70%);bottom:-60px;left:35%}
+
+.mm-badge{background:linear-gradient(135deg,var(--bl-bg),#EEF3FE);border-color:var(--bl-b);color:var(--bl)}
+.mm-dot{background:var(--bl)}.mm-dot::after{border-color:var(--bl)}
+.mm-header h1{background-image:linear-gradient(135deg,var(--bl) 0%,var(--te) 35%,var(--am) 65%,var(--vi) 100%)}
+
+.mm-kpi:nth-child(1){--kpi-accent:var(--bl)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--te)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--am)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--ro)}
+
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-sl{--c-accent:var(--sl);--c-bg:var(--sl-bg);--c-border:var(--sl-b);--c-shadow:rgba(42,52,88,.18)}
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-ro{--c-accent:var(--ro);--c-bg:var(--ro-bg);--c-border:var(--ro-b);--c-shadow:rgba(184,24,54,.18)}
+
+.mm-flow-bl{--flow-color:var(--bl);--flow-color2:var(--te);--flow-border:var(--bl-b);--flow-shadow:rgba(26,82,200,.15);--flow-num-bg:var(--bl-bg);--flow-num-border:var(--bl-b)}
+.mm-flow-bl .mm-dash{stroke:var(--bl)}.mm-flow-bl .mm-arrowhead{fill:var(--bl)}.mm-flow-bl .mm-traveldot{fill:var(--bl)}.mm-flow-bl .mm-step-num{color:var(--bl)}
+
+/* Nested scope zones */
+.scope-zone{border-radius:16px;padding:14px;margin-bottom:14px;animation:slideUp .6s ease both;transition:box-shadow .3s}
+.scope-slash  {border:2px solid var(--bl-b);background:linear-gradient(145deg,var(--bl-bg),#F8FAFE);animation-delay:.05s}.scope-slash:hover{box-shadow:0 6px 22px rgba(26,82,200,.1)}
+.scope-project{border:1.5px solid var(--te-b);background:linear-gradient(145deg,var(--te-bg),#F5FBF9);margin-top:10px;animation-delay:.12s}.scope-project:hover{box-shadow:0 6px 22px rgba(10,122,106,.1)}
+.scope-user   {border:1.5px solid var(--am-b);background:linear-gradient(145deg,var(--am-bg),#FFFBF0);margin-top:10px;animation-delay:.19s}.scope-user:hover{box-shadow:0 6px 22px rgba(192,123,0,.1)}
+.scope-label  {display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.zbadge{display:inline-block;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:default;transition:transform .2s}.zbadge:hover{transform:scale(1.04)}
+.zb-sl{background:var(--bl);color:#EEF3FE}.zb-pr{background:var(--te);color:#E2F6F4}.zb-us{background:var(--am);color:#FEF5DC}
+.zdesc{font-size:11px;font-weight:500}.zd-sl{color:#1B3A9A}.zd-pr{color:#085041}.zd-us{color:#7A4A08}
+
+/* Mini cards inside zones */
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+@media(max-width:500px){.mini-grid{grid-template-columns:1fr}}
+.mini-card{border-radius:10px;padding:12px;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+.mini-card::after{content:'';position:absolute;top:-100%;left:-50%;width:30%;height:300%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);transition:all .5s}
+.mini-card:hover::after{top:100%;left:120%}
+.mini-te{background:var(--te-bg);border:1.5px solid var(--te-b)}.mini-te:hover{transform:translateY(-3px);box-shadow:0 7px 20px rgba(10,122,106,.18)}
+.mini-am{background:var(--am-bg);border:1.5px solid var(--am-b)}.mini-am:hover{transform:translateY(-3px);box-shadow:0 7px 20px rgba(192,123,0,.18)}
+.mini-title{font-size:11px;font-weight:800;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.mini-te .mini-title{color:#085041}.mini-am .mini-title{color:#7A4A08}
+.mini-item{display:flex;gap:7px;font-size:11px;margin-bottom:5px;line-height:1.5;align-items:flex-start;transition:transform .2s}
+.mini-item:hover{transform:translateX(3px)}
+.mini-dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;margin-top:4px}
+
+/* Comparison boxes for scopes */
+.comp-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:500px){.comp-row{grid-template-columns:1fr}}
+.comp-card{border-radius:13px;padding:14px;transition:transform .3s,box-shadow .3s}
+.comp-proj{background:var(--te-bg);border:2px solid var(--te-b)}.comp-proj:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(10,122,106,.2)}
+.comp-user{background:var(--am-bg);border:2px solid var(--am-b)}.comp-user:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(192,123,0,.2)}
+.comp-title{font-size:12px;font-weight:800;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.comp-proj .comp-title{color:#085041}.comp-user .comp-title{color:#7A4A08}
+.cpill{padding:2px 9px;border-radius:6px;font-size:10px;font-weight:700}
+.cpill-p{background:#1D9E75;color:#E1F5EE}.cpill-u{background:#D88B16;color:#FEF5E4}
+.comp-item{display:flex;gap:7px;font-size:11px;margin-bottom:5px;line-height:1.5;align-items:flex-start}
+.cdot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;margin-top:4px}
+
+/* Two-column layout for best practices */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:500px){.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="aurora"><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div></div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>Slash Commands · Workflow Automation</div>
+    <h1>Custom Slash Commands<br>Stop Repeating Prompts</h1>
+    <p>Saved prompts that automate repeatable development tasks — define once, reuse forever with /command-name</p>
+  </div>
+
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">/cmd</div><div class="mm-kpi-label">Slash command<br>invocation syntax</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="2">0</div><div class="mm-kpi-label">Scope types:<br>Project + User</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">.md</div><div class="mm-kpi-label">Markdown-based<br>command format</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="0">0</div><div class="mm-kpi-label">Repeated manual<br>prompts needed</div></div>
+  </div>
+
+  <!-- Nested scope zones -->
+  <div class="scope-zone scope-slash">
+    <div class="scope-label">
+      <span class="zbadge zb-sl">⚡ Custom Slash Commands</span>
+      <span class="zdesc zd-sl">Saved prompts automating repeatable tasks — defined once, reused forever</span>
+    </div>
+    <div class="mm-tags">
+      <span class="mm-tag mm-tag-bl">Saved Prompts</span>
+      <span class="mm-tag mm-tag-bl">Workflow Automation</span>
+      <span class="mm-tag mm-tag-bl">Markdown (.md) Files</span>
+      <span class="mm-tag mm-tag-bl">Invoked via /command-name</span>
+      <span class="mm-tag mm-tag-ro">⚠ No command = repeated context every session</span>
+    </div>
+
+    <div class="scope-zone scope-project">
+      <div class="scope-label">
+        <span class="zbadge zb-pr">📁 Project-Scoped</span>
+        <span class="zdesc zd-pr">Stored in <span class="mm-pill">.claude/commands/</span> — tied to one project, version-controlled with team</span>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-te">Lives in .claude/commands/</span>
+        <span class="mm-tag mm-tag-te">Git-tracked with codebase</span>
+        <span class="mm-tag mm-tag-te">Team-shareable</span>
+        <span class="mm-tag mm-tag-te">seed-db command</span>
+        <span class="mm-tag mm-tag-te">create-spec command</span>
+      </div>
+
+      <div class="scope-zone scope-user">
+        <div class="scope-label">
+          <span class="zbadge zb-us">👤 User-Scoped</span>
+          <span class="zdesc zd-us">Stored in <span class="mm-pill">~/.claude/commands/</span> — available across all projects</span>
+        </div>
+        <div class="mm-tags">
+          <span class="mm-tag mm-tag-am">Global availability</span>
+          <span class="mm-tag mm-tag-am">Personal workflow tools</span>
+          <span class="mm-tag mm-tag-am">Cross-project reuse</span>
+          <span class="mm-tag mm-tag-am">Independent of codebase</span>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-card mini-te">
+            <div class="mini-title">🌱 seed-db Command</div>
+            <div class="mini-item"><div class="mini-dot" style="background:var(--te)"></div><span style="color:#085041">Seeds DB with dummy users & expense records automatically</span></div>
+            <div class="mini-item"><div class="mini-dot" style="background:var(--te)"></div><span style="color:#085041">Eliminates manual test-data entry every dev session</span></div>
+            <div class="mini-item"><div class="mini-dot" style="background:var(--ro)"></div><span style="color:#7A1A0A">Without it: manual data insertion before every test cycle</span></div>
+          </div>
+          <div class="mini-card mini-am">
+            <div class="mini-title">📋 create-spec Command</div>
+            <div class="mini-item"><div class="mini-dot" style="background:var(--am)"></div><span style="color:#7A4A08">Generates structured spec documents for new features</span></div>
+            <div class="mini-item"><div class="mini-dot" style="background:var(--am)"></div><span style="color:#7A4A08">Captures acceptance criteria, requirements, edge cases</span></div>
+            <div class="mini-item"><div class="mini-dot" style="background:var(--am)"></div><span style="color:#7A4A08">Spec feeds directly into technical implementation plan</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW -->
+  <div class="mm-card c-bl" style="margin-bottom:14px;opacity:1;">
+    <div class="mm-card-head"><div class="mm-card-ico">🔄</div><div><div class="mm-card-title">Create & Use a Slash Command — Workflow</div><div class="mm-card-subtitle">7 steps from spotting a pattern to validated output</div></div></div>
+    <div class="mm-flow mm-flow-bl">
+      <div class="mm-step"><div class="mm-step-num">01</div><div class="mm-step-ico">🔍</div><div class="mm-step-lbl">Spot Repetition</div><div class="mm-step-sub">Manual prompts repeated</div></div>
+      <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#sc1"/></animateMotion></circle><path id="sc1" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="mm-step"><div class="mm-step-num">02</div><div class="mm-step-ico">📁</div><div class="mm-step-lbl">Choose Scope</div><div class="mm-step-sub">Project or User?</div></div>
+      <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#sc2"/></animateMotion></circle><path id="sc2" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="mm-step"><div class="mm-step-num">03</div><div class="mm-step-ico">✍️</div><div class="mm-step-lbl">Write .md File</div><div class="mm-step-sub">Instructions & examples</div></div>
+      <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#sc3"/></animateMotion></circle><path id="sc3" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="mm-step"><div class="mm-step-num">04</div><div class="mm-step-ico">⚡</div><div class="mm-step-lbl">Invoke /cmd</div><div class="mm-step-sub">Type slash command</div></div>
+      <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#sc4"/></animateMotion></circle><path id="sc4" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="mm-step"><div class="mm-step-num">05</div><div class="mm-step-ico">🤖</div><div class="mm-step-lbl">AI Executes</div><div class="mm-step-sub">Follows saved instructions</div></div>
+      <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#sc5"/></animateMotion></circle><path id="sc5" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="mm-step"><div class="mm-step-num">06</div><div class="mm-step-ico">👁️</div><div class="mm-step-lbl">Review Output</div><div class="mm-step-sub">Review before applying</div></div>
+      <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.7s"><mpath href="#sc6"/></animateMotion></circle><path id="sc6" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="mm-step"><div class="mm-step-num">07</div><div class="mm-step-ico">✅</div><div class="mm-step-lbl">Validate</div><div class="mm-step-sub">Check acceptance criteria</div></div>
+    </div>
+  </div>
+
+  <div class="mm-grid">
+
+    <div class="mm-card c-bl">
+      <div class="mm-card-head"><div class="mm-card-ico">🔐</div><div><div class="mm-card-title">Auth Feature Demo</div><div class="mm-card-subtitle">create-spec → plan → code pipeline</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">1</div><span>Used <span class="mm-pill">create-spec</span> to generate auth feature specification</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">2</div><span>Spec auto-converted to detailed technical implementation plan</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">3</div><span>Built <b>Registration</b> flow — user sign-up with validation</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">4</div><span>Built <b>Login / Logout</b> — session management</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">5</div><span>Sets stage for next: Profile feature development</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-bl">🔑 Registration</span><span class="mm-tag mm-tag-bl">🔓 Login/Logout</span><span class="mm-tag mm-tag-te">📜 Spec→Plan→Code</span></div>
+    </div>
+
+    <div class="mm-card c-sl">
+      <div class="mm-card-head"><div class="mm-card-ico">🛠️</div><div><div class="mm-card-title">Developer Best Practices</div><div class="mm-card-subtitle">Clean workflow for AI-assisted development</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span>Always use <b>Git branches</b> per feature — never code on main</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Review AI-generated plans</b> before applying — don't blindly run</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Validate code</b> against acceptance criteria from the spec</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span>Keep <span class="mm-pill">.md</span> files <b>focused</b> — one task per command</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span>Commit <span class="mm-pill">.claude/commands/</span> to version control for team sharing</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-sl">🌿 Git Branches</span><span class="mm-tag mm-tag-ro">⚠ Review First</span><span class="mm-tag mm-tag-te">📋 Criteria</span></div>
+    </div>
+
+    <div class="mm-card c-te mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">⚖️</div><div><div class="mm-card-title">Project-Scoped vs User-Scoped — When to Use Which</div><div class="mm-card-subtitle">Choose the right scope for the right situation</div></div></div>
+      <div class="comp-row">
+        <div class="comp-card comp-proj">
+          <div class="comp-title"><span class="cpill cpill-p">📁 PROJECT</span>Use Project-Scoped when...</div>
+          <div class="comp-item"><div class="cdot" style="background:var(--te)"></div><span style="color:#085041">Command depends on this project's architecture or DB schema</span></div>
+          <div class="comp-item"><div class="cdot" style="background:var(--te)"></div><span style="color:#085041">Whole team should access the same workflow automatically</span></div>
+          <div class="comp-item"><div class="cdot" style="background:var(--te)"></div><span style="color:#085041">Commands should be version-controlled alongside codebase</span></div>
+          <div class="comp-item"><div class="cdot" style="background:var(--te)"></div><span style="color:#085041">New devs get all workflow commands via <span class="mm-pill">git clone</span></span></div>
+        </div>
+        <div class="comp-card comp-user">
+          <div class="comp-title"><span class="cpill cpill-u">👤 USER</span>Use User-Scoped when...</div>
+          <div class="comp-item"><div class="cdot" style="background:var(--am)"></div><span style="color:#7A4A08">Command applies generically to any project you work on</span></div>
+          <div class="comp-item"><div class="cdot" style="background:var(--am)"></div><span style="color:#7A4A08">Personal preferences: code style, commit message format</span></div>
+          <div class="comp-item"><div class="cdot" style="background:var(--am)"></div><span style="color:#7A4A08">You don't want to expose commands to teammates</span></div>
+          <div class="comp-item"><div class="cdot" style="background:var(--am)"></div><span style="color:#7A4A08">Reusable across multiple projects without duplication</span></div>
+        </div>
+      </div>
+      <div class="mm-rule">
+        <div class="mm-rule-icon">💡</div>
+        <div><div class="mm-rule-title">Core Insight — Stop Repeating Yourself</div><div class="mm-rule-body">Every task you repeat more than twice is a candidate for a slash command. <strong>create-spec → plan → validate against acceptance criteria</strong> is the golden loop.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['/cmd', '.md', 'spec', 'seed', 'git', '→', '[]', 'ctx', '//', 'fn()'],
+    [210, 165, 38, 270, 22]
+  );
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Mode & Ultraplan in Claude Code</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#6B3FD4,transparent 70%);top:-80px;left:-90px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#E8620A,transparent 70%);top:40%;right:-120px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#0A7A6A,transparent 70%);bottom:-60px;left:33%}
+
+.mm-badge{background:linear-gradient(135deg,var(--vi-bg),#F5F3FF);border-color:var(--vi-b);color:var(--vi)}
+.mm-dot{background:var(--vi)}.mm-dot::after{border-color:var(--vi)}
+.mm-header h1{background-image:linear-gradient(135deg,var(--vi) 0%,var(--or) 30%,var(--te) 60%,var(--bl) 100%)}
+
+.mm-kpi:nth-child(1){--kpi-accent:var(--vi)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--te)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--or)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--bl)}
+
+.pc-1{--chip-bg:var(--vi-bg);--chip-border:var(--vi-b);--chip-color:var(--vi)}.pc-1:hover{box-shadow:0 10px 26px rgba(107,63,212,.18);border-color:var(--vi)!important}
+.pc-2{--chip-bg:var(--te-bg);--chip-border:var(--te-b);--chip-color:var(--te)}.pc-2:hover{box-shadow:0 10px 26px rgba(10,122,106,.18);border-color:var(--te)!important}
+.pc-3{--chip-bg:var(--or-bg);--chip-border:var(--or-b);--chip-color:var(--or)}.pc-3:hover{box-shadow:0 10px 26px rgba(232,98,10,.18);border-color:var(--or)!important}
+
+.c-vi{--c-accent:var(--vi);--c-bg:var(--vi-bg);--c-border:var(--vi-b);--c-shadow:rgba(107,63,212,.18)}
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+.c-or{--c-accent:var(--or);--c-bg:var(--or-bg);--c-border:var(--or-b);--c-shadow:rgba(232,98,10,.18)}
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-ro{--c-accent:var(--ro);--c-bg:var(--ro-bg);--c-border:var(--ro-b);--c-shadow:rgba(184,24,54,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-gr{--c-accent:var(--gr);--c-bg:var(--gr-bg);--c-border:var(--gr-b);--c-shadow:rgba(24,122,58,.18)}
+
+.mm-flow-vi{--flow-color:var(--vi);--flow-color2:var(--te);--flow-border:var(--vi-b);--flow-shadow:rgba(107,63,212,.15);--flow-num-bg:var(--vi-bg);--flow-num-border:var(--vi-b)}
+.mm-flow-vi .mm-dash{stroke:var(--vi)}.mm-flow-vi .mm-arrowhead{fill:var(--vi)}.mm-flow-vi .mm-traveldot{fill:var(--vi)}.mm-flow-vi .mm-step-num{color:var(--vi)}
+
+/* Settings 3-column grid */
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}
+@media(max-width:500px){.settings{grid-template-columns:1fr}}
+.sblock{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:12px;text-align:center;transition:transform .3s,box-shadow .3s,border-color .3s}
+.sblock:nth-child(1):hover{transform:translateY(-4px) scale(1.03);border-color:var(--vi-b);box-shadow:0 7px 18px rgba(107,63,212,.16)}
+.sblock:nth-child(2):hover{transform:translateY(-4px) scale(1.03);border-color:var(--bl-b);box-shadow:0 7px 18px rgba(26,82,200,.16)}
+.sblock:nth-child(3):hover{transform:translateY(-4px) scale(1.03);border-color:var(--or-b);box-shadow:0 7px 18px rgba(232,98,10,.16)}
+.sico{font-size:19px;margin-bottom:5px;display:block;transition:transform .3s}.sblock:hover .sico{transform:rotate(12deg) scale(1.18)}
+.sname{font-size:11px;font-weight:700;margin-bottom:3px}
+.sblock:nth-child(1) .sname{color:var(--vi)}.sblock:nth-child(2) .sname{color:var(--bl)}.sblock:nth-child(3) .sname{color:var(--or)}
+.sdesc{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* Compare boxes */
+.cbox{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:13px;transition:transform .3s,box-shadow .3s}
+.cbox:hover{transform:translateY(-3px)}
+.cbox:nth-child(1){border-color:var(--vi-b)}.cbox:nth-child(1):hover{box-shadow:0 6px 18px rgba(107,63,212,.15)}
+.cbox:nth-child(2){border-color:var(--te-b)}.cbox:nth-child(2):hover{box-shadow:0 6px 18px rgba(10,122,106,.15)}
+.cbox-ico{font-size:17px;margin-bottom:5px}.cbox-title{font-size:11px;font-weight:700;margin-bottom:4px}
+.cbox:nth-child(1) .cbox-title{color:var(--vi)}.cbox:nth-child(2) .cbox-title{color:var(--te)}
+.cbox-desc{font-size:10.5px;color:var(--muted);line-height:1.45}
+</style>
+</head>
+<body>
+
+<div class="aurora"><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div></div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>Plan Mode · Ultraplan · Spec-Driven Dev</div>
+    <h1>Plan Mode & Ultraplan<br>in Claude Code</h1>
+    <p>Spec-Driven Development — generate plans, review with confidence, execute and validate against criteria</p>
+  </div>
+
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">Plan</div><div class="mm-kpi-label">Mode: think before<br>you write any code</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">SDD</div><div class="mm-kpi-label">Spec-Driven<br>Development workflow</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="3">0</div><div class="mm-kpi-label">Plan Mode settings:<br>model · thinking · effort</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">☁️</div><div class="mm-kpi-label">Ultraplan:<br>cloud-based super-planner</div></div>
+  </div>
+
+  <div class="mm-chips">
+    <div class="mm-chip pc-1"><span class="chip-icon">🗺️</span><div class="chip-label">Plan Before You Code</div><div class="chip-desc">Generate a full implementation plan and review it before a single line of code is written.</div></div>
+    <div class="mm-chip pc-2"><span class="chip-icon">✅</span><div class="chip-label">Validate, Don't Guess</div><div class="chip-desc">Every change is measured against predefined acceptance criteria — not vibes.</div></div>
+    <div class="mm-chip pc-3"><span class="chip-icon">🌩️</span><div class="chip-label">Ultraplan for Complexity</div><div class="chip-desc">When tasks outgrow local compute, switch to cloud-based Ultraplan for superior reasoning.</div></div>
+  </div>
+
+  <div class="mm-grid">
+
+    <div class="mm-card c-te">
+      <div class="mm-card-head"><div class="mm-card-ico">🗄️</div><div><div class="mm-card-title">Database Foundation First</div><div class="mm-card-subtitle">Setting up the expense tracker DB before any feature work</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">1</div><span><b>Table creation</b> — design schema for users, expenses, categories before app code</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">2</div><span><b>Database seeding</b> — populate with dummy data to enable realistic dev testing</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">3</div><span><b>Core functions</b> — implement foundational DB helper functions used across the app</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">4</div><span><b>SDD workflow</b> — write the spec first, derive the DB design from it, not the reverse</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-te">📊 Schema Design</span><span class="mm-tag mm-tag-te">🌱 Seeding</span><span class="mm-tag mm-tag-te">⚙️ Core Functions</span></div>
+    </div>
+
+    <div class="mm-card c-vi">
+      <div class="mm-card-head"><div class="mm-card-ico">🗺️</div><div><div class="mm-card-title">What Is Plan Mode?</div><div class="mm-card-subtitle">Think first — Claude plans before it acts</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">★</div><span><b>Generate plan first</b> — structured implementation plan before touching any files</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Human review gate</b> — developer reviews and approves before execution begins</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Execute with plan</b> — once approved, Claude implements exactly what was planned</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Validate against criteria</b> — output checked against acceptance criteria post-execution</span></div>
+      </div>
+      <div class="mm-rule">
+        <div class="mm-rule-icon">💡</div>
+        <div><div class="mm-rule-title">⭐ PLAN → REVIEW → EXECUTE LOOP</div><div class="mm-rule-body">Force a planning step, insert a human review, then execute. Eliminates the <strong>"looked fine but was wrong"</strong> failure mode.</div></div>
+      </div>
+    </div>
+
+    <div class="mm-card c-bl">
+      <div class="mm-card-head"><div class="mm-card-ico">⚙️</div><div><div class="mm-card-title">Plan Mode Settings</div><div class="mm-card-subtitle">Three dials to tune for quality and efficiency</div></div></div>
+      <div class="settings">
+        <div class="sblock"><div class="sico">🤖</div><div class="sname">Model Selection</div><div class="sdesc">Pick a more capable model for complex planning — match tier to task difficulty</div></div>
+        <div class="sblock"><div class="sico">🧠</div><div class="sname">Extended Thinking</div><div class="sdesc">Enable for improved reasoning quality — Claude thinks longer before committing</div></div>
+        <div class="sblock"><div class="sico">🎚️</div><div class="sname">Effort Level</div><div class="sdesc">Adjust to manage token usage — higher effort = better plan but more tokens</div></div>
+      </div>
+      <div class="mm-tags" style="margin-top:13px"><span class="mm-tag mm-tag-bl">🤖 Model Tier</span><span class="mm-tag mm-tag-bl">🧠 Extended Thinking</span><span class="mm-tag mm-tag-bl">🎚️ Token Budget</span></div>
+    </div>
+
+    <div class="mm-card c-or">
+      <div class="mm-card-head"><div class="mm-card-ico">🌩️</div><div><div class="mm-card-title">Ultraplan Mode</div><div class="mm-card-subtitle">Cloud-powered planning for complex tasks</div></div></div>
+      <div class="mm-compare">
+        <div class="cbox"><div class="cbox-ico">💻</div><div class="cbox-title">Standard Plan Mode</div><div class="cbox-desc">Local Claude instance. Works well for most everyday planning tasks.</div></div>
+        <div class="cbox"><div class="cbox-ico">☁️</div><div class="cbox-title">Ultraplan Mode</div><div class="cbox-desc">Cloud-based. Superior reasoning for multi-system, high-complexity planning.</div></div>
+      </div>
+      <div class="mm-items" style="margin-top:11px">
+        <div class="mm-item"><div class="mm-dot-badge">→</div><span><b>When to use Ultraplan:</b> multi-service architectures, ambiguous requirements, large-scale refactors</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">→</div><span><b>Trade-off:</b> higher quality planning at the cost of additional compute / latency</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-or">☁️ Cloud-Based</span><span class="mm-tag mm-tag-or">🧩 Complex Tasks</span><span class="mm-tag mm-tag-or">⬆️ Superior Reasoning</span></div>
+    </div>
+
+    <!-- FLOW -->
+    <div class="mm-card c-gr mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🔄</div><div><div class="mm-card-title">Full Git + Plan Mode Workflow — End to End</div><div class="mm-card-subtitle">From spec to merged feature — the complete development loop</div></div></div>
+      <div class="mm-flow mm-flow-vi">
+        <div class="mm-step"><div class="mm-step-num">01</div><div class="mm-step-ico">📋</div><div class="mm-step-lbl">Write Spec</div><div class="mm-step-sub">Requirements & criteria</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#pm1"/></animateMotion></circle><path id="pm1" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">02</div><div class="mm-step-ico">🌿</div><div class="mm-step-lbl">Git Branch</div><div class="mm-step-sub">Never code on main</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#pm2"/></animateMotion></circle><path id="pm2" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">03</div><div class="mm-step-ico">🗺️</div><div class="mm-step-lbl">Plan Mode</div><div class="mm-step-sub">Generate plan</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#pm3"/></animateMotion></circle><path id="pm3" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">04</div><div class="mm-step-ico">👁️</div><div class="mm-step-lbl">Review Plan</div><div class="mm-step-sub">Human approves</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#pm4"/></animateMotion></circle><path id="pm4" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">05</div><div class="mm-step-ico">⚡</div><div class="mm-step-lbl">Execute</div><div class="mm-step-sub">Claude implements</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#pm5"/></animateMotion></circle><path id="pm5" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">06</div><div class="mm-step-ico">✅</div><div class="mm-step-lbl">Validate</div><div class="mm-step-sub">Check all criteria</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.7s"><mpath href="#pm6"/></animateMotion></circle><path id="pm6" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">07</div><div class="mm-step-ico">🚀</div><div class="mm-step-lbl">Commit → PR</div><div class="mm-step-sub">Push, open PR, merge</div></div>
+      </div>
+    </div>
+
+    <div class="mm-card c-ro">
+      <div class="mm-card-head"><div class="mm-card-ico">⚠️</div><div><div class="mm-card-title">Common Pitfalls</div><div class="mm-card-subtitle">What breaks the Plan Mode workflow</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Skipping the spec</b> — no acceptance criteria = no way to validate correctness</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Auto-approving plans</b> — blindly executing AI plans without human review defeats the purpose</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Coding on main</b> — Plan Mode changes can be wide-reaching; always use a feature branch</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Wrong model tier</b> — lightweight model for deeply complex planning degrades quality</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-ro">🚫 No Spec</span><span class="mm-tag mm-tag-ro">🤖 Blind Execution</span><span class="mm-tag mm-tag-ro">🌿 No Branching</span><span class="mm-tag mm-tag-am">⚖️ Model Mismatch</span></div>
+    </div>
+
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">📊</div><div><div class="mm-card-title">Healthy Plan Mode Indicators</div><div class="mm-card-subtitle">Signs your workflow is working correctly</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Plan reviewed before execution</b> — you understood every step before approving</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>All criteria met post-execution</b> — output matches every acceptance criterion</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Clean Git history</b> — each feature has its own branch, commit, and PR</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Token budget respected</b> — effort level matched to task complexity</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Right tool for complexity</b> — Ultraplan reserved for tasks that genuinely need it</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-am">📋 Plan Reviewed</span><span class="mm-tag mm-tag-am">✅ Criteria Met</span><span class="mm-tag mm-tag-gr">🌿 Clean Git</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['Plan', 'SDD', 'spec', '→', 'git', 'RAG', '[]', 'ctx', '//', '∞'],
+    [270, 22, 165, 210, 38]
+  );
+</script>
+</body>
+</html>
