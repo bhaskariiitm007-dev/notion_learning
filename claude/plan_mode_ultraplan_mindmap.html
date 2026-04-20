@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Mode & Ultraplan in Claude Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F6F2;--surface:#FFFFFF;--s2:#F0EEE8;--border:rgba(0,0,0,.07);
+  --text:#1E1C18;--muted:#7A7568;
+  --f:'Outfit',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;
+  --vi:#6B3FD4;--vi-b:rgba(107,63,212,.22);--vi-bg:#EDEAFC;
+  --te:#0A7A6A;--te-b:rgba(10,122,106,.22);--te-bg:#E3F5F2;
+  --or:#E8620A;--or-b:rgba(232,98,10,.22);--or-bg:#FEF0E3;
+  --bl:#1A52C8;--bl-b:rgba(26,82,200,.22);--bl-bg:#E8EFFE;
+  --ro:#B81836;--ro-b:rgba(184,24,54,.22);--ro-bg:#FEE5EB;
+  --am:#C07B00;--am-b:rgba(192,123,0,.22);--am-bg:#FEF5DC;
+  --gr:#187A3A;--gr-b:rgba(24,122,58,.22);--gr-bg:#E5F6EC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--bg);color:var(--text);min-height:100vh;padding:28px 18px 48px;overflow-x:hidden;position:relative}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ab{position:absolute;border-radius:50%;filter:blur(90px);opacity:.14;animation:blobf ease-in-out infinite alternate;will-change:transform}
+.ab:nth-child(1){width:550px;height:380px;background:radial-gradient(circle,#6B3FD4,transparent 70%);top:-80px;left:-90px;animation-duration:17s}
+.ab:nth-child(2){width:480px;height:360px;background:radial-gradient(circle,#E8620A,transparent 70%);top:40%;right:-120px;animation-duration:21s;animation-delay:-8s}
+.ab:nth-child(3){width:420px;height:320px;background:radial-gradient(circle,#0A7A6A,transparent 70%);bottom:-60px;left:33%;animation-duration:19s;animation-delay:-12s}
+@keyframes blobf{0%{transform:translate(0,0) scale(1)}50%{transform:translate(28px,-18px) scale(1.05)}100%{transform:translate(-12px,14px) scale(.97)}}
+.noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");background-size:300px 300px}
+#cvs{position:fixed;inset:0;z-index:2;pointer-events:none}
+.page{position:relative;z-index:3;max-width:960px;margin:0 auto}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:28px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--vi-bg),#F5F3FF);border:1.5px solid var(--vi-b);border-radius:30px;padding:6px 18px;font-size:11px;font-weight:700;color:var(--vi);letter-spacing:.7px;text-transform:uppercase;margin-bottom:16px;animation:chipFloat 3s ease-in-out infinite,heroIn .7s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes heroIn{from{opacity:0;transform:translateY(-18px) scale(.9)}to{opacity:1;transform:none}}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--vi);position:relative;flex-shrink:0;animation:sdotB 1.4s ease infinite}
+.sdot::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--vi);animation:sdotR 1.4s ease infinite}
+@keyframes sdotB{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes sdotR{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.4);opacity:0}}
+h1{font-size:clamp(24px,4vw,44px);font-weight:900;letter-spacing:-1.5px;line-height:1.08;background:linear-gradient(135deg,var(--vi) 0%,var(--or) 30%,var(--te) 60%,var(--bl) 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;animation:gradShift 6s ease infinite,h1In .8s .15s cubic-bezier(.34,1.3,.64,1) both}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes h1In{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.header p{font-family:var(--fm);font-size:12px;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.7;animation:subIn .8s .3s ease both;opacity:0}
+@keyframes subIn{to{opacity:1}from{opacity:0;transform:translateY(10px)}}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:17px 12px;text-align:center;position:relative;overflow:hidden;cursor:default;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both}
+.kpi:nth-child(1){animation-delay:.07s}.kpi:nth-child(2){animation-delay:.14s}.kpi:nth-child(3){animation-delay:.21s}.kpi:nth-child(4){animation-delay:.28s}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.kpi:nth-child(1)::before{background:var(--vi)}.kpi:nth-child(2)::before{background:var(--te)}.kpi:nth-child(3)::before{background:var(--or)}.kpi:nth-child(4)::before{background:var(--bl)}
+.kpi::after{content:'';position:absolute;top:-100%;left:0;right:0;height:45%;background:linear-gradient(180deg,transparent,rgba(255,255,255,.6),transparent);animation:scan 4s ease infinite;pointer-events:none}
+.kpi:nth-child(1)::after{animation-delay:0s}.kpi:nth-child(2)::after{animation-delay:1s}.kpi:nth-child(3)::after{animation-delay:2s}.kpi:nth-child(4)::after{animation-delay:3s}
+@keyframes scan{0%{top:-60%}60%,100%{top:130%}}
+.kpi:hover{transform:translateY(-6px) rotate(1.2deg) scale(1.03)}
+.kpi:nth-child(1):hover{box-shadow:0 12px 30px rgba(107,63,212,.2)}.kpi:nth-child(2):hover{box-shadow:0 12px 30px rgba(10,122,106,.2)}.kpi:nth-child(3):hover{box-shadow:0 12px 30px rgba(232,98,10,.2)}.kpi:nth-child(4):hover{box-shadow:0 12px 30px rgba(26,82,200,.2)}
+.kpi-val{font-size:clamp(18px,2.8vw,26px);font-weight:900;line-height:1;margin-bottom:5px}
+.kpi:nth-child(1) .kpi-val{color:var(--vi)}.kpi:nth-child(2) .kpi-val{color:var(--te)}.kpi:nth-child(3) .kpi-val{color:var(--or)}.kpi:nth-child(4) .kpi-val{color:var(--bl)}
+.kpi-label{font-size:10px;color:var(--muted);line-height:1.4;font-family:var(--fm)}
+
+/* CONCEPT CHIPS */
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.chip{border-radius:14px;padding:15px 13px;text-align:center;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;animation:slideUp .5s ease both;position:relative;overflow:hidden}
+.chip:nth-child(1){animation-delay:.1s;border:1.5px solid var(--vi-b);background:linear-gradient(135deg,var(--surface),var(--vi-bg))}
+.chip:nth-child(2){animation-delay:.2s;border:1.5px solid var(--te-b);background:linear-gradient(135deg,var(--surface),var(--te-bg))}
+.chip:nth-child(3){animation-delay:.3s;border:1.5px solid var(--or-b);background:linear-gradient(135deg,var(--surface),var(--or-bg))}
+.chip:hover{transform:translateY(-5px)}
+.chip:nth-child(1):hover{box-shadow:0 10px 26px rgba(107,63,212,.18);border-color:var(--vi)}
+.chip:nth-child(2):hover{box-shadow:0 10px 26px rgba(10,122,106,.18);border-color:var(--te)}
+.chip:nth-child(3):hover{box-shadow:0 10px 26px rgba(232,98,10,.18);border-color:var(--or)}
+.chip .icon{font-size:25px;margin-bottom:7px;display:block;animation:iconBob 3s ease-in-out infinite;transition:transform .3s}
+.chip:hover .icon{transform:rotate(-8deg) scale(1.18)!important}
+.chip:nth-child(2) .icon{animation-delay:1s}.chip:nth-child(3) .icon{animation-delay:2s}
+@keyframes iconBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.chip .label{font-size:12px;font-weight:700;margin-bottom:4px}
+.chip:nth-child(1) .label{color:var(--vi)}.chip:nth-child(2) .label{color:var(--te)}.chip:nth-child(3) .label{color:var(--or)}
+.chip .desc{font-size:11px;color:var(--muted);line-height:1.45}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.full{grid-column:1/-1}
+@media(max-width:640px){.grid,.chips{grid-template-columns:1fr}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+
+/* CARD */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden;opacity:0;transition:transform .3s,box-shadow .3s,border-color .3s}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.card.vi{border-color:var(--vi-b);background:linear-gradient(145deg,var(--surface) 55%,var(--vi-bg))}.card.vi::before{background:var(--vi)}.card.vi.v:hover{box-shadow:0 14px 34px rgba(107,63,212,.18);border-color:var(--vi)}
+.card.te{border-color:var(--te-b);background:linear-gradient(145deg,var(--surface) 55%,var(--te-bg))}.card.te::before{background:var(--te)}.card.te.v:hover{box-shadow:0 14px 34px rgba(10,122,106,.18);border-color:var(--te)}
+.card.or{border-color:var(--or-b);background:linear-gradient(145deg,var(--surface) 55%,var(--or-bg))}.card.or::before{background:var(--or)}.card.or.v:hover{box-shadow:0 14px 34px rgba(232,98,10,.18);border-color:var(--or)}
+.card.bl{border-color:var(--bl-b);background:linear-gradient(145deg,var(--surface) 55%,var(--bl-bg))}.card.bl::before{background:var(--bl)}.card.bl.v:hover{box-shadow:0 14px 34px rgba(26,82,200,.18);border-color:var(--bl)}
+.card.ro{border-color:var(--ro-b);background:linear-gradient(145deg,var(--surface) 55%,var(--ro-bg))}.card.ro::before{background:var(--ro)}.card.ro.v:hover{box-shadow:0 14px 34px rgba(184,24,54,.18);border-color:var(--ro)}
+.card.am{border-color:var(--am-b);background:linear-gradient(145deg,var(--surface) 55%,var(--am-bg))}.card.am::before{background:var(--am)}.card.am.v:hover{box-shadow:0 14px 34px rgba(192,123,0,.18);border-color:var(--am)}
+.card.gr{border-color:var(--gr-b);background:linear-gradient(145deg,var(--surface) 55%,var(--gr-bg))}.card.gr::before{background:var(--gr)}.card.gr.v:hover{box-shadow:0 14px 34px rgba(24,122,58,.18);border-color:var(--gr)}
+.card.v{opacity:1;animation:cardInL .5s cubic-bezier(.34,1.2,.64,1) both}
+.card:nth-child(even).v{animation-name:cardInR}
+@keyframes cardInL{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:translateX(0)}}
+@keyframes cardInR{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
+.card.v:hover{transform:translateY(-4px)}
+.ch{display:flex;align-items:center;gap:11px;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--border)}
+.ci{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.card:hover .ci{transform:rotate(-8deg) scale(1.12)}
+.vi .ci{background:var(--vi-bg);border:1.5px solid var(--vi-b)}.te .ci{background:var(--te-bg);border:1.5px solid var(--te-b)}.or .ci{background:var(--or-bg);border:1.5px solid var(--or-b)}.bl .ci{background:var(--bl-bg);border:1.5px solid var(--bl-b)}.ro .ci{background:var(--ro-bg);border:1.5px solid var(--ro-b)}.am .ci{background:var(--am-bg);border:1.5px solid var(--am-b)}.gr .ci{background:var(--gr-bg);border:1.5px solid var(--gr-b)}
+.ct{font-size:13.5px;font-weight:700}.cs{font-size:10.5px;color:var(--muted);margin-top:1px}
+.vi .ct{color:var(--vi)}.te .ct{color:var(--te)}.or .ct{color:var(--or)}.bl .ct{color:var(--bl)}.ro .ct{color:var(--ro)}.am .ct{color:var(--am)}.gr .ct{color:var(--gr)}
+
+/* ITEMS */
+.items{display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.item{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;line-height:1.55;opacity:0;transform:translateX(-14px);animation:itemIn .4s ease both;transition:transform .2s}
+.item:nth-child(1){animation-delay:.04s}.item:nth-child(2){animation-delay:.1s}.item:nth-child(3){animation-delay:.16s}.item:nth-child(4){animation-delay:.22s}.item:nth-child(5){animation-delay:.28s}
+@keyframes itemIn{to{opacity:1;transform:translateX(0)}}
+.item:hover{transform:translateX(4px)!important}
+.dot{width:21px;height:21px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:1px;transition:transform .2s;animation:dotPop .45s cubic-bezier(.34,1.56,.64,1) both}
+.item:hover .dot{transform:rotate(10deg) scale(1.2)}
+@keyframes dotPop{from{opacity:0;transform:scale(.3) rotate(-30deg)}to{opacity:1;transform:scale(1)}}
+.vi .dot{background:var(--vi-bg);color:var(--vi)}.te .dot{background:var(--te-bg);color:var(--te)}.or .dot{background:var(--or-bg);color:var(--or)}.bl .dot{background:var(--bl-bg);color:var(--bl)}.ro .dot{background:var(--ro-bg);color:var(--ro)}.am .dot{background:var(--am-bg);color:var(--am)}.gr .dot{background:var(--gr-bg);color:var(--gr)}
+.item b{color:var(--text);font-weight:700}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;position:relative;z-index:1}
+.tag{padding:4px 11px;border-radius:20px;font-size:10.5px;font-weight:600;cursor:default;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;animation:tagBounce .5s cubic-bezier(.34,1.56,.64,1) both}
+.tag:nth-child(1){animation-delay:.1s}.tag:nth-child(2){animation-delay:.17s}.tag:nth-child(3){animation-delay:.24s}.tag:nth-child(4){animation-delay:.31s}
+@keyframes tagBounce{from{opacity:0;transform:scale(.4) translateY(8px)}to{opacity:1;transform:scale(1)}}
+.tag:hover{transform:scale(1.1) translateY(-2px)}
+.tag::before{content:'';position:absolute;inset:0;border-radius:20px;background:rgba(0,0,0,.06);transform:scaleX(0);transition:transform .25s;transform-origin:left}
+.tag:hover::before{transform:scaleX(1)}
+.tag.vi{background:var(--vi-bg);border:1px solid var(--vi-b);color:var(--vi)}.tag.vi:hover{box-shadow:0 4px 12px rgba(107,63,212,.3)}
+.tag.te{background:var(--te-bg);border:1px solid var(--te-b);color:var(--te)}.tag.te:hover{box-shadow:0 4px 12px rgba(10,122,106,.3)}
+.tag.or{background:var(--or-bg);border:1px solid var(--or-b);color:var(--or)}.tag.or:hover{box-shadow:0 4px 12px rgba(232,98,10,.3)}
+.tag.bl{background:var(--bl-bg);border:1px solid var(--bl-b);color:var(--bl)}.tag.bl:hover{box-shadow:0 4px 12px rgba(26,82,200,.3)}
+.tag.ro{background:var(--ro-bg);border:1px solid var(--ro-b);color:var(--ro)}.tag.ro:hover{box-shadow:0 4px 12px rgba(184,24,54,.3)}
+.tag.am{background:var(--am-bg);border:1px solid var(--am-b);color:var(--am)}.tag.am:hover{box-shadow:0 4px 12px rgba(192,123,0,.3)}
+.tag.gr{background:var(--gr-bg);border:1px solid var(--gr-b);color:var(--gr)}.tag.gr:hover{box-shadow:0 4px 12px rgba(24,122,58,.3)}
+
+/* SETTINGS GRID */
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px}
+.sblock{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:12px;text-align:center;transition:transform .3s,box-shadow .3s,border-color .3s}
+.sblock:nth-child(1):hover{transform:translateY(-4px) scale(1.03);border-color:var(--vi-b);box-shadow:0 7px 18px rgba(107,63,212,.16)}
+.sblock:nth-child(2):hover{transform:translateY(-4px) scale(1.03);border-color:var(--bl-b);box-shadow:0 7px 18px rgba(26,82,200,.16)}
+.sblock:nth-child(3):hover{transform:translateY(-4px) scale(1.03);border-color:var(--or-b);box-shadow:0 7px 18px rgba(232,98,10,.16)}
+.sico{font-size:20px;margin-bottom:5px;display:block;transition:transform .3s}.sblock:hover .sico{transform:rotate(12deg) scale(1.18)}
+.sname{font-size:11px;font-weight:700;margin-bottom:3px}
+.sblock:nth-child(1) .sname{color:var(--vi)}.sblock:nth-child(2) .sname{color:var(--bl)}.sblock:nth-child(3) .sname{color:var(--or)}
+.sdesc{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* COMPARE */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.cbox{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:14px;transition:transform .3s,box-shadow .3s}
+.cbox:hover{transform:translateY(-3px)}
+.cbox:nth-child(1){border-color:var(--vi-b)}.cbox:nth-child(1):hover{box-shadow:0 6px 18px rgba(107,63,212,.15)}
+.cbox:nth-child(2){border-color:var(--te-b)}.cbox:nth-child(2):hover{box-shadow:0 6px 18px rgba(10,122,106,.15)}
+.cico{font-size:18px;margin-bottom:6px}.ctitle{font-size:11px;font-weight:700;margin-bottom:4px}
+.cbox:nth-child(1) .ctitle{color:var(--vi)}.cbox:nth-child(2) .ctitle{color:var(--te)}
+.cdesc{font-size:10.5px;color:var(--muted);line-height:1.45}
+
+/* RULE BOX */
+.rule-box{border-radius:12px;padding:13px 15px;margin:13px 0 0;display:flex;align-items:flex-start;gap:11px;position:relative;z-index:1;background:linear-gradient(135deg,var(--or-bg),#FFFAF5);animation:bflow 4s linear infinite}
+@keyframes bflow{0%{box-shadow:0 0 0 2px rgba(232,98,10,.4)}25%{box-shadow:0 0 0 2px rgba(192,123,0,.4)}50%{box-shadow:0 0 0 2px rgba(10,122,106,.4)}75%{box-shadow:0 0 0 2px rgba(26,82,200,.4)}100%{box-shadow:0 0 0 2px rgba(232,98,10,.4)}}
+.ri{font-size:24px;flex-shrink:0;animation:biconBounce 1.8s ease-in-out infinite}
+@keyframes biconBounce{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-10deg)}}
+.rt{font-size:12px;font-weight:800;color:var(--or);margin-bottom:3px}
+.rd{font-size:11px;color:#7A4A10;line-height:1.55}
+
+/* FLOW */
+.flow{display:flex;align-items:flex-start;width:100%;gap:0}
+.step{flex:1 1 0;min-width:0;background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:clamp(8px,1.4vw,13px) clamp(4px,.8vw,9px);text-align:center;position:relative;overflow:hidden;cursor:default;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,border-color .3s}
+.step::before{content:'';position:absolute;bottom:0;left:12%;right:12%;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--vi),var(--te));transform:scaleX(0);transition:transform .3s}
+.step:hover{transform:translateY(-6px);border-color:var(--vi-b);box-shadow:0 8px 20px rgba(107,63,212,.15)}.step:hover::before{transform:scaleX(1)}
+.snum{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:5px;background:var(--vi-bg);border:1.5px solid var(--vi-b);font-size:8px;font-weight:800;color:var(--vi);font-family:var(--fm);margin-bottom:5px}
+.sico{font-size:clamp(14px,2vw,20px);margin-bottom:4px;display:block;transition:transform .3s}.step:hover .sico{transform:scale(1.2) rotate(-8deg)}
+.slbl{font-size:clamp(7.5px,1vw,10px);font-weight:700;color:var(--text);line-height:1.3}
+.ssub{font-size:clamp(6.5px,.85vw,9px);color:var(--muted);margin-top:2px;line-height:1.25}
+.fa{flex:0 0 clamp(16px,2vw,26px);display:flex;align-items:center;justify-content:center;padding-top:24px}
+.fa svg{width:100%;height:14px;overflow:visible}
+.dl{stroke:var(--vi);stroke-width:1.5;fill:none;stroke-dasharray:4 3;stroke-linecap:round;animation:dashMove .8s linear infinite}
+@keyframes dashMove{to{stroke-dashoffset:-14}}
+.ah{fill:var(--vi)}.amdot{fill:var(--vi);opacity:.9}
+@media(max-width:700px){.flow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fa{display:none}.step{padding:10px 8px}}
+@media(max-width:360px){.flow{grid-template-columns:1fr}}
+
+/* PILL */
+.pill{display:inline-block;background:var(--s2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--fm);font-size:.85em;color:var(--vi);font-weight:600}
+
+/* RIPPLE */
+.rring{position:absolute;border-radius:50%;width:10px;height:10px;margin:-5px;background:rgba(107,63,212,.28);transform:scale(0);animation:ripOut .6s ease-out forwards;pointer-events:none}
+@keyframes ripOut{to{transform:scale(12);opacity:0}}
+@keyframes popIn{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="aurora"><div class="ab"></div><div class="ab"></div><div class="ab"></div></div>
+<div class="noise"></div>
+<canvas id="cvs"></canvas>
+<div class="page">
+
+<div class="header">
+  <div class="badge"><span class="sdot"></span>Plan Mode · Ultraplan · Spec-Driven Dev</div>
+  <h1>Plan Mode & Ultraplan<br>in Claude Code</h1>
+  <p>Spec-Driven Development for an expense tracker — generate plans, execute with confidence, validate against criteria</p>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi" onclick="ripple(event,this)"><div class="kpi-val">Plan</div><div class="kpi-label">Mode: think before<br>you write any code</div></div>
+  <div class="kpi" onclick="ripple(event,this)"><div class="kpi-val">SDD</div><div class="kpi-label">Spec-Driven<br>Development workflow</div></div>
+  <div class="kpi" onclick="ripple(event,this)"><div class="kpi-val" id="k3">0</div><div class="kpi-label">Plan Mode settings:<br>model · thinking · effort</div></div>
+  <div class="kpi" onclick="ripple(event,this)"><div class="kpi-val">☁️</div><div class="kpi-label">Ultraplan:<br>cloud-based super-planner</div></div>
+</div>
+
+<div class="chips">
+  <div class="chip"><span class="icon">🗺️</span><div class="label">Plan Before You Code</div><div class="desc">Generate a full implementation plan and review it before a single line of code is written.</div></div>
+  <div class="chip"><span class="icon">✅</span><div class="label">Validate, Don't Guess</div><div class="desc">Every change is measured against predefined acceptance criteria — not vibes.</div></div>
+  <div class="chip"><span class="icon">🌩️</span><div class="label">Ultraplan for Complexity</div><div class="desc">When tasks outgrow local compute, switch to cloud-based Ultraplan for superior reasoning.</div></div>
+</div>
+
+<div class="grid">
+
+  <div class="card te" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">🗄️</div><div><div class="ct">Database Foundation First</div><div class="cs">Setting up the expense tracker DB before any feature work</div></div></div>
+    <div class="items">
+      <div class="item"><div class="dot">1</div><span><b>Table creation</b> — design schema for users, expenses, categories before app code</span></div>
+      <div class="item"><div class="dot">2</div><span><b>Database seeding</b> — populate with dummy data to enable realistic dev testing</span></div>
+      <div class="item"><div class="dot">3</div><span><b>Core functions</b> — implement foundational DB helper functions used across the app</span></div>
+      <div class="item"><div class="dot">4</div><span><b>SDD workflow</b> — write the spec first, derive the DB design from it, not the reverse</span></div>
+    </div>
+    <div class="tags"><span class="tag te">📊 Schema Design</span><span class="tag te">🌱 Seeding</span><span class="tag te">⚙️ Core Functions</span></div>
+  </div>
+
+  <div class="card vi" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">🗺️</div><div><div class="ct">What Is Plan Mode?</div><div class="cs">Think first — Claude plans before it acts</div></div></div>
+    <div class="items">
+      <div class="item"><div class="dot">★</div><span><b>Generate plan first</b> — structured implementation plan before touching any files</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>Human review gate</b> — developer reviews and approves before execution begins</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>Execute with plan</b> — once approved, Claude implements exactly what was planned</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>Validate against criteria</b> — output checked against acceptance criteria post-execution</span></div>
+    </div>
+    <div class="rule-box">
+      <div class="ri">💡</div>
+      <div><div class="rt">⭐ PLAN → REVIEW → EXECUTE LOOP</div><div class="rd">Never let AI go from prompt to code in one jump. Force a planning step, insert a human review, then execute. Eliminates the "looked fine but was wrong" failure mode.</div></div>
+    </div>
+  </div>
+
+  <div class="card bl" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">⚙️</div><div><div class="ct">Plan Mode Best Practice Settings</div><div class="cs">Three dials to tune for quality and efficiency</div></div></div>
+    <div class="settings">
+      <div class="sblock"><div class="sico">🤖</div><div class="sname">Model Selection</div><div class="sdesc">Pick a more capable model for complex planning — not every task needs the same tier</div></div>
+      <div class="sblock"><div class="sico">🧠</div><div class="sname">Extended Thinking</div><div class="sdesc">Enable for improved reasoning quality — Claude thinks longer before committing</div></div>
+      <div class="sblock"><div class="sico">🎚️</div><div class="sname">Effort Level</div><div class="sdesc">Adjust to manage token usage — higher effort = better plan but more tokens</div></div>
+    </div>
+    <div class="tags" style="margin-top:13px"><span class="tag bl">🤖 Model Tier</span><span class="tag bl">🧠 Extended Thinking</span><span class="tag bl">🎚️ Token Budget</span></div>
+  </div>
+
+  <div class="card or" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">🌩️</div><div><div class="ct">Ultraplan Mode</div><div class="cs">Cloud-powered planning for highly complex tasks</div></div></div>
+    <div class="compare">
+      <div class="cbox"><div class="cico">💻</div><div class="ctitle">Standard Plan Mode</div><div class="cdesc">Local Claude instance. Works for most everyday planning tasks with good quality.</div></div>
+      <div class="cbox"><div class="cico">☁️</div><div class="ctitle">Ultraplan Mode</div><div class="cdesc">Cloud-based. Unlocks superior reasoning for multi-system, high-complexity planning.</div></div>
+    </div>
+    <div class="items" style="margin-top:11px">
+      <div class="item"><div class="dot">→</div><span><b>When to use Ultraplan:</b> multi-service architectures, ambiguous requirements, large-scale refactors</span></div>
+      <div class="item"><div class="dot">→</div><span><b>Trade-off:</b> higher quality planning at the cost of additional compute / latency</span></div>
+    </div>
+    <div class="tags"><span class="tag or">☁️ Cloud-Based</span><span class="tag or">🧩 Complex Tasks</span><span class="tag or">⬆️ Superior Reasoning</span></div>
+  </div>
+
+  <!-- FLOW -->
+  <div class="card gr full" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">🔄</div><div><div class="ct">Full Git + Plan Mode Workflow — End to End</div><div class="cs">From spec to merged feature — the complete development loop</div></div></div>
+    <div class="flow">
+      <div class="step"><div class="snum">01</div><div class="sico">📋</div><div class="slbl">Write Spec</div><div class="ssub">Define requirements & criteria</div></div>
+      <div class="fa"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="dl"/><polygon points="20,3 30,7 20,11" class="ah"/><circle r="2.2" class="amdot"><animateMotion dur="1s" repeatCount="indefinite"><mpath href="#g1"/></animateMotion></circle><path id="g1" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="step"><div class="snum">02</div><div class="sico">🌿</div><div class="slbl">Git Branch</div><div class="ssub">Never code on main</div></div>
+      <div class="fa"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="dl"/><polygon points="20,3 30,7 20,11" class="ah"/><circle r="2.2" class="amdot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#g2"/></animateMotion></circle><path id="g2" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="step"><div class="snum">03</div><div class="sico">🗺️</div><div class="slbl">Plan Mode</div><div class="ssub">Generate plan</div></div>
+      <div class="fa"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="dl"/><polygon points="20,3 30,7 20,11" class="ah"/><circle r="2.2" class="amdot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#g3"/></animateMotion></circle><path id="g3" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="step"><div class="snum">04</div><div class="sico">👁️</div><div class="slbl">Review Plan</div><div class="ssub">Human approves</div></div>
+      <div class="fa"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="dl"/><polygon points="20,3 30,7 20,11" class="ah"/><circle r="2.2" class="amdot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#g4"/></animateMotion></circle><path id="g4" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="step"><div class="snum">05</div><div class="sico">⚡</div><div class="slbl">Execute</div><div class="ssub">Claude implements plan</div></div>
+      <div class="fa"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="dl"/><polygon points="20,3 30,7 20,11" class="ah"/><circle r="2.2" class="amdot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#g5"/></animateMotion></circle><path id="g5" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="step"><div class="snum">06</div><div class="sico">✅</div><div class="slbl">Validate</div><div class="ssub">Check all criteria</div></div>
+      <div class="fa"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="dl"/><polygon points="20,3 30,7 20,11" class="ah"/><circle r="2.2" class="amdot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.7s"><mpath href="#g6"/></animateMotion></circle><path id="g6" d="M0,7 L20,7" fill="none"/></svg></div>
+      <div class="step"><div class="snum">07</div><div class="sico">🚀</div><div class="slbl">Commit → PR</div><div class="ssub">Push, open PR, merge</div></div>
+    </div>
+  </div>
+
+  <div class="card ro" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">⚠️</div><div><div class="ct">Common Pitfalls</div><div class="cs">What breaks the Plan Mode workflow</div></div></div>
+    <div class="items">
+      <div class="item"><div class="dot">!</div><span><b>Skipping the spec</b> — no acceptance criteria = no way to validate correctness</span></div>
+      <div class="item"><div class="dot">!</div><span><b>Auto-approving plans</b> — blindly executing AI plans without human review defeats the purpose</span></div>
+      <div class="item"><div class="dot">!</div><span><b>Coding on main</b> — Plan Mode changes can be wide-reaching; always use a feature branch</span></div>
+      <div class="item"><div class="dot">!</div><span><b>Wrong model tier</b> — lightweight model for deeply complex planning degrades quality</span></div>
+    </div>
+    <div class="tags"><span class="tag ro">🚫 No Spec</span><span class="tag ro">🤖 Blind Execution</span><span class="tag ro">🌿 No Branching</span><span class="tag am">⚖️ Model Mismatch</span></div>
+  </div>
+
+  <div class="card am" onclick="ripple(event,this)">
+    <div class="ch"><div class="ci">📊</div><div><div class="ct">Healthy Plan Mode Indicators</div><div class="cs">Signs your workflow is working correctly</div></div></div>
+    <div class="items">
+      <div class="item"><div class="dot">✓</div><span><b>Plan reviewed before execution</b> — you understood every step before approving</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>All criteria met post-execution</b> — output matches every acceptance criterion</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>Clean Git history</b> — each feature has its own branch, commit, and PR</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>Token budget respected</b> — effort level matched to task complexity</span></div>
+      <div class="item"><div class="dot">✓</div><span><b>Right tool for complexity</b> — Ultraplan reserved for tasks that genuinely need it</span></div>
+    </div>
+    <div class="tags"><span class="tag am">📋 Plan Reviewed</span><span class="tag am">✅ Criteria Met</span><span class="tag gr">🌿 Clean Git</span></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  const c=document.getElementById('cvs'),x=c.getContext('2d');
+  const t=['Plan','SDD','spec','→','git','RAG','[]','ctx','//','∞'];
+  const p=[];
+  function r(){c.width=window.innerWidth;c.height=window.innerHeight}
+  r();window.addEventListener('resize',r);
+  for(let i=0;i<20;i++)p.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight+window.innerHeight,vx:(Math.random()-.5)*.35,vy:-(Math.random()*.55+.25),a:Math.random()*.2+.06,t:t[~~(Math.random()*t.length)],s:Math.random()*3+9,h:[270,22,165,210,38][~~(Math.random()*5)]});
+  function draw(){
+    x.clearRect(0,0,c.width,c.height);
+    p.forEach(d=>{
+      d.x+=d.vx;d.y+=d.vy;
+      if(d.y<-30){d.y=c.height+20;d.x=Math.random()*c.width}
+      x.save();x.font=`500 ${d.s}px 'JetBrains Mono',monospace`;x.fillStyle=`hsla(${d.h},58%,40%,${d.a})`;x.fillText(d.t,d.x,d.y);x.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+window.addEventListener('load',()=>{
+  function cu(el,t,dur=1100){const s=performance.now();(function step(now){const r=Math.min((now-s)/dur,1),e=1-Math.pow(1-r,3);el.textContent=Math.round(e*t);if(r<1)requestAnimationFrame(step);})(performance.now())}
+  setTimeout(()=>cu(document.getElementById('k3'),3),400);
+});
+const obs=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting){e.target.style.animationDelay=(i*.07)+'s';e.target.classList.add('v');obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.card').forEach(c=>obs.observe(c));
+function ripple(e,el){const r=el.getBoundingClientRect(),ring=document.createElement('div');ring.className='rring';ring.style.left=(e.clientX-r.left)+'px';ring.style.top=(e.clientY-r.top)+'px';el.appendChild(ring);ring.addEventListener('animationend',()=>ring.remove())}
+window.addEventListener('scroll',()=>{const y=window.scrollY,bs=document.querySelectorAll('.ab');bs[0]&&(bs[0].style.transform=`translateY(${y*.1}px)`);bs[1]&&(bs[1].style.transform=`translateY(${-y*.07}px)`);bs[2]&&(bs[2].style.transform=`translateY(${y*.05}px)`);},{passive:true});
+window.addEventListener('scroll',()=>{const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)||0;document.documentElement.style.filter=`hue-rotate(${p*14}deg)`;},{passive:true});
+</script>
+</body>
+</html>

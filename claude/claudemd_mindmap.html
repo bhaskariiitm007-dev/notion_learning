@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>claude.md — The Most Important File</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F7F9;--s1:#FFF;--s2:#EEF2F7;--bdr:rgba(0,0,0,.08);--tx:#1A1C22;--tx2:#444A58;--mu:#7A8090;--F:'Outfit',system-ui,sans-serif;--M:'JetBrains Mono',monospace;
+--bl:#1A52CC;--bl-l:#E8EFFE;--bl-b:rgba(26,82,204,.28);--bl-g:rgba(26,82,204,.15);
+--tl:#0A7A6E;--tl-l:#E2F6F4;--tl-b:rgba(10,122,110,.28);--tl-g:rgba(10,122,110,.15);
+--pu:#6B35D9;--pu-l:#EDEAFC;--pu-b:rgba(107,53,217,.28);--pu-g:rgba(107,53,217,.15);
+--or:#D9620A;--or-l:#FEF0E4;--or-b:rgba(217,98,10,.28);--or-g:rgba(217,98,10,.15);
+--ro:#C0172A;--ro-l:#FEE5EB;--ro-b:rgba(192,23,42,.28);--ro-g:rgba(192,23,42,.15);
+--gn:#1A7A3C;--gn-l:#E5F6EC;--gn-b:rgba(26,122,60,.28);--gn-g:rgba(26,122,60,.15);
+--am:#9A6400;--am-l:#FEF5DC;--am-b:rgba(154,100,0,.28);--am-g:rgba(154,100,0,.15);
+--sl:#334155;--sl-l:#F1F5F9;--sl-b:rgba(51,65,85,.22);--sl-g:rgba(51,65,85,.10);}
+/* SHARED ENGINE — Light Theme, Mobile-First, No Mouse-Pointer tricks */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;filter:hue-rotate(var(--hs,0deg))}
+body{font-family:var(--F);background:var(--bg);color:var(--tx);overflow-x:hidden}
+/* AURORA */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ab{position:absolute;border-radius:50%;filter:blur(90px);opacity:.14}
+.ab1{animation:aF 14s ease-in-out infinite}
+.ab2{animation:aF 11s ease-in-out infinite;animation-delay:-5s}
+.ab3{animation:aF 16s ease-in-out infinite;animation-delay:-9s}
+@keyframes aF{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-24px) scale(1.05)}66%{transform:translate(-16px,18px) scale(.96)}}
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");opacity:.5;pointer-events:none;z-index:1}
+/* PARTICLES */
+#ptc{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.5}
+.wrap{position:relative;z-index:3;max-width:1100px;margin:0 auto;padding:36px 18px 64px}
+/* HERO */
+.hero{text-align:center;margin-bottom:44px;opacity:0;transform:translateY(-22px);animation:riseIn .85s .05s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes riseIn{to{opacity:1;transform:translateY(0)}}
+/* CHIP FLOAT + BADGE */
+.badge{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:5px 16px;font-family:var(--M);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:18px;animation:chipFloat 3s ease-in-out infinite}
+@keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+/* PULSING DOT */
+.pdot{width:8px;height:8px;border-radius:50%;position:relative;flex-shrink:0}
+.pdot::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:2px solid currentColor;animation:pRing 1.5s ease infinite;opacity:.6}
+@keyframes pRing{0%{transform:scale(.5);opacity:.8}100%{transform:scale(1.8);opacity:0}}
+/* GRADIENT TEXT */
+.gtxt{background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gS 7s ease infinite}
+@keyframes gS{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero h1{font-size:clamp(26px,5vw,50px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:12px}
+.hero p{font-size:14px;color:var(--mu);max-width:600px;margin:0 auto;line-height:1.7;font-weight:500}
+.hero p em{font-style:normal;font-weight:700}
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kc{background:var(--s1);border:1.5px solid var(--bdr);border-radius:16px;padding:18px 12px;text-align:center;position:relative;overflow:hidden;opacity:0;transform:translateY(16px);animation:riseIn .6s cubic-bezier(.22,1,.36,1) forwards;transition:transform .3s,box-shadow .3s;cursor:default}
+/* CARD BAR */
+.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+/* SCAN LINE */
+.kc::after{content:'';position:absolute;left:0;right:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.6),rgba(255,255,255,0));animation:scan 4.5s ease-in-out infinite;pointer-events:none;top:-50%}
+@keyframes scan{0%{top:-50%}100%{top:140%}}
+/* LIFT KPI */
+.kc:hover{transform:translateY(-5px)}
+.kpi-val{font-family:var(--M);font-size:24px;font-weight:700;line-height:1;margin-bottom:7px}
+.kpi-lbl{font-size:11px;color:var(--mu);line-height:1.45;font-weight:500}
+/* CONCEPT CHIPS */
+.chip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px}
+.cc{background:var(--s1);border:1.5px solid var(--bdr);border-radius:16px;padding:18px 14px;text-align:center;opacity:0;transform:translateY(16px);animation:riseIn .6s cubic-bezier(.22,1,.36,1) forwards;transition:transform .3s,box-shadow .3s;cursor:default;position:relative;overflow:hidden}
+.cc:hover{transform:translateY(-5px)}
+.cico{font-size:30px;display:inline-block;margin-bottom:9px;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.cc:hover .cico{transform:rotate(14deg) scale(1.15)}
+.clbl{font-size:12.5px;font-weight:800;margin-bottom:4px}
+.cdesc{font-size:11px;color:var(--tx2);line-height:1.5}
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.full{grid-column:1/-1}
+/* CARD */
+.card{background:var(--s1);border:1.5px solid var(--bdr);border-radius:18px;padding:20px;opacity:0;transform:translateY(20px);animation:riseIn .65s cubic-bezier(.22,1,.36,1) forwards;position:relative;overflow:hidden;transition:box-shadow .3s;cursor:default}
+/* CARD BAR TOP */
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:18px 18px 0 0;z-index:1}
+/* CARD TINT handled per-color */
+/* LIFT+GLOW on hover via class */
+/* CSS-only 3D TILT */
+.card:hover{transform:translateY(-3px) perspective(800px) rotateX(1deg)}
+/* RIPPLE */
+.rw{position:absolute;border-radius:50%;background:rgba(0,0,0,.07);transform:scale(0);animation:ripOut .7s ease forwards;pointer-events:none}
+@keyframes ripOut{to{transform:scale(1);opacity:0}}
+/* CARD HEADER */
+.ch{display:flex;align-items:center;gap:11px;margin-bottom:16px;padding-bottom:13px;border-bottom:1.5px solid var(--bdr)}
+.chi{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.card:hover .chi{transform:rotate(-10deg) scale(1.1)}
+.cht{font-size:14px;font-weight:800;letter-spacing:-.2px}
+.chs{font-size:11px;color:var(--mu);margin-top:2px;font-weight:500}
+/* ITEM SLIDE */
+.items{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.65;color:var(--tx2);opacity:0;transform:translateX(-12px);animation:slideIn .45s cubic-bezier(.22,1,.36,1) forwards}
+.item:nth-child(1){animation-delay:1.1s}.item:nth-child(2){animation-delay:1.2s}.item:nth-child(3){animation-delay:1.3s}.item:nth-child(4){animation-delay:1.4s}.item:nth-child(5){animation-delay:1.5s}.item:nth-child(6){animation-delay:1.6s}
+@keyframes slideIn{to{opacity:1;transform:translateX(0)}}
+.item b{color:var(--tx);font-weight:700}
+/* NUMBERED BADGE */
+.dot{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:2px;font-family:var(--M)}
+/* RULE BOX — MORPHING BORDER */
+.rb{border-radius:12px;padding:13px 15px;margin-top:14px;display:flex;align-items:flex-start;gap:10px;position:relative}
+.rb::before{content:'';position:absolute;inset:0;border-radius:12px;background:linear-gradient(90deg,var(--c1,#f97316),var(--c2,#14b8a6),var(--c3,#8b5cf6),var(--c1,#f97316));background-size:300% 100%;animation:bF 3s linear infinite;padding:1.5px;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+@keyframes bF{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.rbi{font-size:20px;flex-shrink:0;animation:bounce 2.2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.rbt{font-size:11px;font-weight:800;font-family:var(--M);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.rbd{font-size:11px;line-height:1.6;opacity:.88}
+/* FLOW — MOBILE FRIENDLY (wraps, arrows hidden on mobile) */
+.flow{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;justify-content:center}
+.fstep{background:var(--s1);border:2px solid var(--bdr);border-radius:12px;padding:12px 14px;text-align:center;min-width:100px;flex:1 1 100px;max-width:140px;position:relative;overflow:hidden;cursor:default;transition:transform .3s,border-color .3s,box-shadow .3s}
+/* STEP HIGHLIGHT */
+.fstep::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.fstep:hover::before{transform:scaleX(1)}
+.fstep:hover{transform:translateY(-4px)}
+/* NUMBERED BADGE on step */
+.fnum{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;color:#fff;font-size:9px;font-weight:800;font-family:var(--M);margin-bottom:6px}
+.fico{font-size:20px;margin-bottom:5px;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.fstep:hover .fico{transform:rotate(-12deg) scale(1.15)}
+.flbl{font-size:11px;font-weight:800;color:var(--tx);margin-bottom:2px;line-height:1.3}
+.fsub{font-size:9.5px;color:var(--mu);line-height:1.35}
+/* ARROW with moving dot */
+.farr{flex-shrink:0;display:flex;align-items:center;margin-top:28px}
+.farr svg{width:30px;height:14px;overflow:visible}
+.al{stroke-width:2;stroke-dasharray:5 4;fill:none;animation:dF 1.6s linear infinite}
+.ah{} /* filled arrow head */
+.adot{} /* moving dot */
+@keyframes dF{from{stroke-dashoffset:18}to{stroke-dashoffset:0}}
+/* BUDGET BAR */
+.blbl{font-family:var(--M);font-size:9.5px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.bouter{background:var(--s2);border-radius:10px;overflow:hidden;height:38px;display:flex;border:1.5px solid var(--bdr);position:relative}
+.seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;font-family:var(--M);color:#fff;letter-spacing:.3px;width:0;transition:width 1.6s cubic-bezier(.22,1,.36,1);cursor:pointer;position:relative;overflow:hidden}
+/* SHIMMER */
+.seg::after{content:'';position:absolute;top:0;left:-80%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);animation:shim 2.2s 2.5s ease forwards}
+@keyframes shim{from{left:-80%}to{left:160%}}
+/* TOOLTIPS */
+.stip{position:absolute;bottom:calc(100%+10px);left:50%;transform:translateX(-50%) scale(.85);transform-origin:bottom center;background:var(--tx);border-radius:9px;padding:7px 11px;white-space:nowrap;font-size:10.5px;color:#fff;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.stip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--tx)}
+.seg:hover .stip{opacity:1;transform:translateX(-50%) scale(1)}
+/* LEGEND HOVER SCALE */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.li{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--tx2);font-family:var(--M);transition:transform .2s;cursor:default}
+.li:hover{transform:scale(1.06)}
+.ld{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+/* PROGRESS BARS — FILL BAR STAGGER */
+.pbars{margin-top:12px}
+.prow{margin-bottom:7px}
+.prl{display:flex;justify-content:space-between;font-size:10px;color:var(--mu);font-family:var(--M);margin-bottom:3px}
+.pbar{height:6px;background:var(--s2);border-radius:99px;overflow:hidden}
+.pf{height:100%;border-radius:99px;width:0;transition:width 1.5s cubic-bezier(.22,1,.36,1)}
+/* TOOL GRID */
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.tbox{background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;padding:14px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;cursor:default}
+.tbox::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.tbox:hover{transform:translateY(-3px)}
+.tbox-ico{font-size:22px;margin-bottom:7px;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.tbox:hover .tbox-ico{transform:rotate(-10deg) scale(1.15)}
+.tbox-name{font-size:12px;font-weight:800;margin-bottom:4px;font-family:var(--M)}
+.tbox-desc{font-size:10.5px;color:var(--mu);line-height:1.5}
+/* TAGS — TAG BOUNCE */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:700;font-family:var(--M);letter-spacing:.2px;cursor:default;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.tag:hover{transform:translateY(-3px) scale(1.06)}
+/* STAGGERED CHECKBOX POP */
+.cklist{display:flex;flex-direction:column;gap:9px}
+.cki{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--tx2);line-height:1.6}
+.cki b{color:var(--tx);font-weight:700}
+.ckb{width:20px;height:20px;border-radius:6px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;animation:ckP .5s cubic-bezier(.34,1.56,.64,1) backwards;cursor:default;transition:transform .3s}
+/* CHECK ROTATE HOVER */
+.ckb:hover{transform:rotate(10deg) scale(1.15)}
+.cki:nth-child(1) .ckb{animation-delay:1.3s}.cki:nth-child(2) .ckb{animation-delay:1.45s}.cki:nth-child(3) .ckb{animation-delay:1.6s}.cki:nth-child(4) .ckb{animation-delay:1.75s}.cki:nth-child(5) .ckb{animation-delay:1.9s}
+@keyframes ckP{from{transform:scale(0) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+/* CODE PILL */
+.pill{display:inline-block;border:1.5px solid;border-radius:6px;padding:1px 8px;font-family:var(--M);font-size:10.5px;font-weight:700;transition:transform .2s}
+.pill:hover{transform:scale(1.05)}
+/* BLINKING STATUS */
+.sbadge{display:inline-flex;align-items:center;gap:7px;border-radius:9px;padding:5px 11px;margin-bottom:12px;font-family:var(--M);font-size:10.5px;font-weight:700}
+.blink{width:6px;height:6px;border-radius:50%;animation:blA 1.1s ease infinite}
+@keyframes blA{0%,100%{opacity:1}50%{opacity:.25}}
+/* SCROLL REVEAL */
+.card,.kc,.cc{animation-play-state:paused}
+.card.vis,.kc.vis,.cc.vis{animation-play-state:running}
+/* RESPONSIVE */
+@media(max-width:680px){
+  .grid{grid-template-columns:1fr}
+  .chip-row{grid-template-columns:1fr 1fr}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .tgrid{grid-template-columns:1fr}
+  .farr{display:none}
+  .fstep{min-width:80px;flex:1 1 80px;max-width:none}
+  .flow{gap:5px}
+}
+@media(max-width:420px){
+  .chip-row{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:1fr 1fr}
+}
+
+.ab1{width:580px;height:580px;background:radial-gradient(#BFDBFE,#3B82F6);top:-150px;right:-90px}
+.ab2{width:440px;height:440px;background:radial-gradient(#A7F3D0,#0D9488);top:42%;left:-70px}
+.ab3{width:350px;height:350px;background:radial-gradient(#DDD6FE,#7C3AED);bottom:-55px;right:30%}
+.badge{background:linear-gradient(135deg,var(--bl-l),#fff);border:1.5px solid var(--bl-b);color:var(--bl);box-shadow:0 3px 14px var(--bl-g)}
+.pdot{background:var(--bl)}.pdot::after{border-color:var(--bl)}
+.gtxt{background:linear-gradient(135deg,var(--bl) 0%,var(--tl) 45%,var(--pu) 90%);background-size:200% 200%}
+.mono-h{font-family:var(--M);color:var(--bl)}
+.hero p em{color:var(--bl)}
+.kc:nth-child(1)::before{background:linear-gradient(90deg,var(--bl),#60A5FA)}.kc:nth-child(1) .kpi-val{color:var(--bl)}.kc:nth-child(1):hover{box-shadow:0 14px 32px var(--bl-g)}
+.kc:nth-child(2)::before{background:linear-gradient(90deg,var(--tl),#059669)}.kc:nth-child(2) .kpi-val{color:var(--tl)}.kc:nth-child(2):hover{box-shadow:0 14px 32px var(--tl-g)}
+.kc:nth-child(3)::before{background:linear-gradient(90deg,var(--pu),#8B5CF6)}.kc:nth-child(3) .kpi-val{color:var(--pu)}.kc:nth-child(3):hover{box-shadow:0 14px 32px var(--pu-g)}
+.kc:nth-child(4)::before{background:linear-gradient(90deg,var(--am),#fbbf24)}.kc:nth-child(4) .kpi-val{color:var(--am)}.kc:nth-child(4):hover{box-shadow:0 14px 32px var(--am-g)}
+.kc:nth-child(1){animation-delay:.18s}.kc:nth-child(2){animation-delay:.26s}.kc:nth-child(3){animation-delay:.34s}.kc:nth-child(4){animation-delay:.42s}
+.cc:nth-child(1){border-color:var(--bl-b);background:linear-gradient(145deg,#fff,var(--bl-l));animation-delay:.52s}.cc:nth-child(1) .clbl{color:var(--bl)}.cc:nth-child(1):hover{box-shadow:0 10px 28px var(--bl-g)}
+.cc:nth-child(2){border-color:var(--tl-b);background:linear-gradient(145deg,#fff,var(--tl-l));animation-delay:.60s}.cc:nth-child(2) .clbl{color:var(--tl)}.cc:nth-child(2):hover{box-shadow:0 10px 28px var(--tl-g)}
+.cc:nth-child(3){border-color:var(--pu-b);background:linear-gradient(145deg,#fff,var(--pu-l));animation-delay:.68s}.cc:nth-child(3) .clbl{color:var(--pu)}.cc:nth-child(3):hover{box-shadow:0 10px 28px var(--pu-g)}
+.cbl{border-color:var(--bl-b);background:linear-gradient(148deg,#fff 55%,var(--bl-l))}.cbl::before{background:linear-gradient(90deg,var(--bl),#60A5FA)}.cbl:hover{box-shadow:0 16px 40px var(--bl-g)}.cbl .chi{background:var(--bl-l);border:1.5px solid var(--bl-b)}.cbl .cht{color:var(--bl)}.cbl .dot{background:var(--bl-l);color:var(--bl);border:1.5px solid var(--bl-b)}
+.ctl{border-color:var(--tl-b);background:linear-gradient(148deg,#fff 55%,var(--tl-l))}.ctl::before{background:linear-gradient(90deg,var(--tl),#059669)}.ctl:hover{box-shadow:0 16px 40px var(--tl-g)}.ctl .chi{background:var(--tl-l);border:1.5px solid var(--tl-b)}.ctl .cht{color:var(--tl)}.ctl .dot{background:var(--tl-l);color:var(--tl);border:1.5px solid var(--tl-b)}
+.cpu{border-color:var(--pu-b);background:linear-gradient(148deg,#fff 55%,var(--pu-l))}.cpu::before{background:linear-gradient(90deg,var(--pu),#8B5CF6)}.cpu:hover{box-shadow:0 16px 40px var(--pu-g)}.cpu .chi{background:var(--pu-l);border:1.5px solid var(--pu-b)}.cpu .cht{color:var(--pu)}.cpu .dot{background:var(--pu-l);color:var(--pu);border:1.5px solid var(--pu-b)}
+.cor{border-color:var(--or-b);background:linear-gradient(148deg,#fff 55%,var(--or-l))}.cor::before{background:linear-gradient(90deg,var(--or),var(--am))}.cor:hover{box-shadow:0 16px 40px var(--or-g)}.cor .chi{background:var(--or-l);border:1.5px solid var(--or-b)}.cor .cht{color:var(--or)}.cor .dot{background:var(--or-l);color:var(--or);border:1.5px solid var(--or-b)}
+.cgn{border-color:var(--gn-b);background:linear-gradient(148deg,#fff 55%,var(--gn-l))}.cgn::before{background:linear-gradient(90deg,var(--gn),#22c55e)}.cgn:hover{box-shadow:0 16px 40px var(--gn-g)}.cgn .chi{background:var(--gn-l);border:1.5px solid var(--gn-b)}.cgn .cht{color:var(--gn)}.cgn .dot{background:var(--gn-l);color:var(--gn);border:1.5px solid var(--gn-b)}
+.cam{border-color:var(--am-b);background:linear-gradient(148deg,#fff 55%,var(--am-l))}.cam::before{background:linear-gradient(90deg,var(--am),#fbbf24)}.cam:hover{box-shadow:0 16px 40px var(--am-g)}.cam .chi{background:var(--am-l);border:1.5px solid var(--am-b)}.cam .cht{color:var(--am)}.cam .dot{background:var(--am-l);color:var(--am);border:1.5px solid var(--am-b)}
+.cro{border-color:var(--ro-b);background:linear-gradient(148deg,#fff 55%,var(--ro-l))}.cro::before{background:linear-gradient(90deg,var(--ro),#f43f5e)}.cro:hover{box-shadow:0 16px 40px var(--ro-g)}.cro .chi{background:var(--ro-l);border:1.5px solid var(--ro-b)}.cro .cht{color:var(--ro)}.cro .dot{background:var(--ro-l);color:var(--ro);border:1.5px solid var(--ro-b)}
+.csl{border-color:var(--sl-b);background:linear-gradient(148deg,#fff 55%,var(--sl-l))}.csl::before{background:linear-gradient(90deg,var(--sl),#64748b)}.csl:hover{box-shadow:0 16px 40px var(--sl-g)}.csl .chi{background:var(--sl-l);border:1.5px solid var(--sl-b)}.csl .cht{color:var(--sl)}.csl .dot{background:var(--sl-l);color:var(--sl);border:1.5px solid var(--sl-b)}
+.card:nth-child(1){animation-delay:.28s}.card:nth-child(2){animation-delay:.36s}.card:nth-child(3){animation-delay:.44s}.card:nth-child(4){animation-delay:.52s}.card:nth-child(5){animation-delay:.60s}.card:nth-child(6){animation-delay:.68s}.card:nth-child(7){animation-delay:.76s}.card:nth-child(8){animation-delay:.84s}
+.cbl .rb,.ctl .rb,.cpu .rb{--c1:var(--bl);--c2:var(--tl);--c3:var(--pu)}
+.cbl .rb{background:linear-gradient(135deg,var(--bl-l),#f0f5ff)}.cbl .rbt{color:var(--bl)}.cbl .rbd{color:#1a3a8f}
+.cgn .rb{--c1:var(--gn);--c2:var(--tl);--c3:var(--bl);background:linear-gradient(135deg,var(--gn-l),#f0fdf4)}.cgn .rbt{color:var(--gn)}.cgn .rbd{color:#0C4A22}
+.cro .rb{--c1:var(--ro);--c2:var(--or);--c3:var(--am);background:linear-gradient(135deg,var(--ro-l),#fff5f7)}.cro .rbt{color:var(--ro)}.cro .rbd{color:#7A0F26}
+.sbadge{background:var(--ro-l);border:1.5px solid var(--ro-b);color:var(--ro)}.blink{background:var(--ro)}
+.tbl{background:var(--bl-l);border:1.5px solid var(--bl-b);color:var(--bl)}.tbl:hover{box-shadow:0 5px 15px var(--bl-g)}
+.ttl{background:var(--tl-l);border:1.5px solid var(--tl-b);color:var(--tl)}.ttl:hover{box-shadow:0 5px 15px var(--tl-g)}
+.tpu{background:var(--pu-l);border:1.5px solid var(--pu-b);color:var(--pu)}.tpu:hover{box-shadow:0 5px 15px var(--pu-g)}
+.tgn{background:var(--gn-l);border:1.5px solid var(--gn-b);color:var(--gn)}.tgn:hover{box-shadow:0 5px 15px var(--gn-g)}
+.tam{background:var(--am-l);border:1.5px solid var(--am-b);color:var(--am)}.tam:hover{box-shadow:0 5px 15px var(--am-g)}
+.tro{background:var(--ro-l);border:1.5px solid var(--ro-b);color:var(--ro)}.tro:hover{box-shadow:0 5px 15px var(--ro-g)}
+.ckb{background:var(--gn-l);border:2px solid var(--gn-b);color:var(--gn)}
+.al{stroke:var(--bl)}.ah{fill:var(--bl)}.adot{fill:var(--tl)}
+.fstep::before{background:linear-gradient(90deg,var(--bl),var(--tl))}.fstep:hover{border-color:var(--bl-b);box-shadow:0 8px 24px var(--bl-g)}
+.fnum{background:linear-gradient(135deg,var(--bl),var(--tl));box-shadow:0 2px 7px var(--bl-g)}
+.pill{background:var(--s2);border-color:var(--bl-b);color:var(--bl)}
+/* FOLDER GRID */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.fbox{background:var(--s2);border:1.5px solid var(--bdr);border-radius:11px;padding:12px;transition:transform .25s;cursor:default;position:relative;overflow:hidden}
+.fbox::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:11px 0 0 11px}
+.fbox:first-child::before{background:var(--bl)}.fbox:last-child::before{background:var(--pu)}
+.fbox:hover{transform:translateY(-3px)}
+.fbox-ico{font-size:18px;margin-bottom:5px;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-block}.fbox:hover .fbox-ico{transform:rotate(-10deg) scale(1.1)}
+.fbox-ttl{font-size:11px;font-weight:800;margin-bottom:4px}.fbox:first-child .fbox-ttl{color:var(--bl)}.fbox:last-child .fbox-ttl{color:var(--pu)}
+.fbox-desc{font-size:10.5px;color:var(--mu);line-height:1.45}.fbox ul{margin:5px 0 0 13px}.fbox ul li{font-size:10px;color:var(--mu);line-height:1.5}
+/* BP GRID */
+.bpgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px}
+.bpbox{background:var(--s2);border:1.5px solid var(--bdr);border-radius:11px;padding:13px;text-align:center;transition:transform .25s;cursor:default;position:relative;overflow:hidden}
+.bpbox::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.bpbox:nth-child(1)::after{background:var(--am)}.bpbox:nth-child(2)::after{background:var(--tl)}.bpbox:nth-child(3)::after{background:var(--bl)}
+.bpbox:hover{transform:translateY(-3px)}.bpbox:nth-child(1):hover{box-shadow:0 6px 18px var(--am-g)}.bpbox:nth-child(2):hover{box-shadow:0 6px 18px var(--tl-g)}.bpbox:nth-child(3):hover{box-shadow:0 6px 18px var(--bl-g)}
+.bpbox-ico{font-size:20px;margin-bottom:6px;display:inline-block;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}.bpbox:hover .bpbox-ico{transform:rotate(-10deg) scale(1.12)}
+.bpbox-name{font-size:11px;font-weight:800;margin-bottom:3px}.bpbox-desc{font-size:10px;color:var(--mu);line-height:1.4}
+.bpbox:nth-child(1) .bpbox-name{color:var(--am)}.bpbox:nth-child(2) .bpbox-name{color:var(--tl)}.bpbox:nth-child(3) .bpbox-name{color:var(--bl)}
+@media(max-width:680px){.fgrid{grid-template-columns:1fr}.bpgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="aurora"><div class="ab ab1"></div><div class="ab ab2"></div><div class="ab ab3"></div></div>
+<canvas id="ptc"></canvas>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge"><div class="pdot"></div>Claude Code &middot; Persistent Context</div>
+  <h1><span class="mono-h">claude.md</span> &mdash; <span class="gtxt">Most Important File</span></h1>
+  <p>LLMs have zero native session memory. <em>claude.md</em> is the bridge &mdash; a persistent system prompt automatically injected into every Claude Code session.</p>
+</div>
+
+<div class="kpi-row">
+  <div class="kc"><div class="kpi-val">&#x1F4C4;</div><div class="kpi-lbl">claude.md: persistent<br>AI system prompt</div></div>
+  <div class="kc"><div class="kpi-val">&lt;200</div><div class="kpi-lbl">Lines: recommended<br>max file length</div></div>
+  <div class="kc"><div class="kpi-val">&#x1F5C2;&#xFE0F;</div><div class="kpi-lbl">.claude folder:<br>project toolbox</div></div>
+  <div class="kc"><div class="kpi-val">&#x1F9E0;</div><div class="kpi-lbl">Auto-memory saves<br>to memory.md silently</div></div>
+</div>
+
+<div class="chip-row">
+  <div class="cc"><div class="cico">&#x1F4CC;</div><div class="clbl">Persistent Context</div><div class="cdesc">claude.md injects your rules into every session automatically &mdash; no manual re-explaining.</div></div>
+  <div class="cc"><div class="cico">&#x1F9E9;</div><div class="clbl">Modular by Design</div><div class="cdesc">Split large projects into folder-specific files &mdash; keep each file focused and under 200 lines.</div></div>
+  <div class="cc"><div class="cico">&#x1F916;</div><div class="clbl">Silent Auto-Learning</div><div class="cdesc">Claude observes patterns in your work and quietly saves preferences to memory.md.</div></div>
+</div>
+
+<div class="grid">
+
+<div class="card cbl">
+  <div class="ch"><div class="chi">&#x1F4C4;</div><div><div class="cht">What Is claude.md?</div><div class="chs">A markdown file that becomes Claude's permanent memory</div></div></div>
+  <div class="sbadge"><div class="blink"></div>LLMs have ZERO native cross-session memory &mdash; claude.md is the only bridge</div>
+  <div class="items">
+    <div class="item"><div class="dot">&#x2605;</div><span><b>Persistent system prompt</b> &mdash; automatically injected at the start of every Claude Code session</span></div>
+    <div class="item"><div class="dot">1</div><span><b>Stores project rules</b> &mdash; coding conventions, architectural decisions, naming standards</span></div>
+    <div class="item"><div class="dot">2</div><span><b>Two creation methods</b> &mdash; write it manually or generate a base version using <span class="pill">/init</span> slash command</span></div>
+    <div class="item"><div class="dot">3</div><span><b>Lives in project root</b> &mdash; stored alongside your code so every team member and session shares identical context</span></div>
+    <div class="item"><div class="dot">4</div><span><b>Living document</b> &mdash; update it as the project evolves; treat it like code, not a one-time setup file</span></div>
+  </div>
+  <div class="rb"><div class="rbi">&#x1F4A1;</div><div><div class="rbt">&#x2B50; Why It Exists</div><div class="rbd">Without claude.md, Claude Code starts from zero every session. You'd re-explain your entire project context repeatedly &mdash; a compounding tax on every conversation.</div></div></div>
+  <div class="tags"><span class="tag tbl">&#x1F4C4; Markdown File</span><span class="tag tbl">&#x1F501; Auto-Injected</span><span class="tag tbl">&#x1F5DD;&#xFE0F; /init Command</span></div>
+</div>
+
+<div class="card cpu">
+  <div class="ch"><div class="chi">&#x1F5C2;&#xFE0F;</div><div><div class="cht">The .claude Folder</div><div class="chs">Claude Code's toolbox &mdash; two distinct scopes</div></div></div>
+  <div class="fgrid">
+    <div class="fbox"><div class="fbox-ico">&#x1F4C1;</div><div class="fbox-ttl">Project-Level</div><div class="fbox-desc">Shared via repository with the whole team. Project-specific config, shared commands, team conventions.</div><ul><li>Committed to Git</li><li>Team-wide rules</li><li>Scoped to this repo</li></ul></div>
+    <div class="fbox"><div class="fbox-ico">&#x1F3E0;</div><div class="fbox-ttl">Global User Folder</div><div class="fbox-desc">Stored in home directory &mdash; private and personal, not committed to Git.</div><ul><li>Private to you</li><li>Cross-project settings</li><li>Personal skills &amp; cmds</li></ul></div>
+  </div>
+  <div class="tags" style="margin-top:12px"><span class="tag tbl">&#x1F4C1; Project &rarr; Git</span><span class="tag tpu">&#x1F3E0; Global &rarr; Home</span><span class="tag tpu">&#x1F9E9; Custom Commands</span></div>
+</div>
+
+<div class="card ctl">
+  <div class="ch"><div class="chi">&#x270D;&#xFE0F;</div><div><div class="cht">What to Put in claude.md</div><div class="chs">High-signal context that saves repetitive re-explanation</div></div></div>
+  <div class="items">
+    <div class="item"><div class="dot">&rarr;</div><span><b>Tech stack overview</b> &mdash; language, framework, runtime versions, package manager</span></div>
+    <div class="item"><div class="dot">&rarr;</div><span><b>Architecture decisions</b> &mdash; folder structure, layering conventions, module boundaries</span></div>
+    <div class="item"><div class="dot">&rarr;</div><span><b>Coding conventions</b> &mdash; naming patterns, formatting rules, preferred idioms</span></div>
+    <div class="item"><div class="dot">&rarr;</div><span><b>Workflow commands</b> &mdash; how to run tests, build, lint, deploy in this project</span></div>
+    <div class="item"><div class="dot">&rarr;</div><span><b>Do-not-touch rules</b> &mdash; files or areas the AI should never modify without explicit instruction</span></div>
+  </div>
+  <div class="tags"><span class="tag ttl">&#x1F3D7;&#xFE0F; Architecture</span><span class="tag ttl">&#x1F4CF; Conventions</span><span class="tag ttl">&#x2699;&#xFE0F; Commands</span><span class="tag ttl">&#x1F6AB; Off-Limits</span></div>
+</div>
+
+<div class="card cam">
+  <div class="ch"><div class="chi">&#x1F3C6;</div><div><div class="cht">Best Practices</div><div class="chs">Keep claude.md sharp, useful, and maintainable</div></div></div>
+  <div class="bpgrid">
+    <div class="bpbox"><div class="bpbox-ico">&#x1F4CF;</div><div class="bpbox-name">Under 200 Lines</div><div class="bpbox-desc">Longer files dilute signal; AI context has limits</div></div>
+    <div class="bpbox"><div class="bpbox-ico">&#x1F504;</div><div class="bpbox-name">Living Document</div><div class="bpbox-desc">Update every time conventions change &mdash; treat as code</div></div>
+    <div class="bpbox"><div class="bpbox-ico">&#x1F9E9;</div><div class="bpbox-name">Modular Approach</div><div class="bpbox-desc">Folder-specific files keep each layer focused</div></div>
+  </div>
+  <div class="pbars">
+    <div class="prow"><div class="prl"><span>Folder-Specific Granularity</span><span>Best</span></div><div class="pbar"><div class="pf" data-w="90" style="background:linear-gradient(90deg,var(--tl),#059669)"></div></div></div>
+    <div class="prow"><div class="prl"><span>Single Root File Only</span><span>Avoid</span></div><div class="pbar"><div class="pf" data-w="28" style="background:linear-gradient(90deg,var(--ro),#f43f5e)"></div></div></div>
+  </div>
+  <div class="tags"><span class="tag tam">&lt;200 Lines</span><span class="tag tam">&#x1F504; Update Often</span><span class="tag ttl">&#x1F9E9; Modular Files</span></div>
+</div>
+
+<div class="card cpu full">
+  <div class="ch"><div class="chi">&#x1F9E0;</div><div><div class="cht">Auto-Memory &mdash; Silent Background Learning</div><div class="chs">Claude Code observes your work and saves patterns to memory.md automatically</div></div></div>
+  <div class="flow">
+    <div class="fstep"><div class="fnum">1</div><div class="fico">&#x1F441;&#xFE0F;</div><div class="flbl">Watch Work</div><div class="fsub">Observes patterns across sessions silently</div></div>
+    <div class="farr"><svg viewBox="0 0 30 14"><line class="al" x1="0" y1="7" x2="22" y2="7"/><polygon class="ah" points="22,3 30,7 22,11"/><circle class="adot" r="2.5" cy="7"><animateMotion dur="1.6s" repeatCount="indefinite" path="M0,0 L22,0"/></circle></svg></div>
+    <div class="fstep"><div class="fnum">2</div><div class="fico">&#x1F50D;</div><div class="flbl">Find Patterns</div><div class="fsub">Detects recurring preferences &amp; insights</div></div>
+    <div class="farr"><svg viewBox="0 0 30 14"><line class="al" x1="0" y1="7" x2="22" y2="7"/><polygon class="ah" points="22,3 30,7 22,11"/><circle class="adot" r="2.5" cy="7"><animateMotion dur="1.6s" repeatCount="indefinite" path="M0,0 L22,0"/></circle></svg></div>
+    <div class="fstep"><div class="fnum">3</div><div class="fico">&#x1F4BE;</div><div class="flbl">Write memory.md</div><div class="fsub">Saves findings without manual input</div></div>
+    <div class="farr"><svg viewBox="0 0 30 14"><line class="al" x1="0" y1="7" x2="22" y2="7"/><polygon class="ah" points="22,3 30,7 22,11"/><circle class="adot" r="2.5" cy="7"><animateMotion dur="1.6s" repeatCount="indefinite" path="M0,0 L22,0"/></circle></svg></div>
+    <div class="fstep"><div class="fnum">4</div><div class="fico">&#x26A1;</div><div class="flbl">Adapt Behavior</div><div class="fsub">Future sessions inherit learned preferences</div></div>
+    <div class="farr"><svg viewBox="0 0 30 14"><line class="al" x1="0" y1="7" x2="22" y2="7"/><polygon class="ah" points="22,3 30,7 22,11"/><circle class="adot" r="2.5" cy="7"><animateMotion dur="1.6s" repeatCount="indefinite" path="M0,0 L22,0"/></circle></svg></div>
+    <div class="fstep"><div class="fnum">5</div><div class="fico">&#x1F331;</div><div class="flbl">Accumulate</div><div class="fsub">AI progressively aligns with your style</div></div>
+  </div>
+  <div class="items" style="margin-top:12px">
+    <div class="item"><div class="dot">eg</div><span><b>Timezone:</b> Notices you always specify UTC+5:30 &mdash; saves so you never repeat it again</span></div>
+    <div class="item"><div class="dot">eg</div><span><b>Currency:</b> Detects app always formats in INR &mdash; auto-applies to generated code without prompting</span></div>
+  </div>
+  <div class="tags"><span class="tag tpu">&#x1F9E0; Auto-Memory</span><span class="tag tpu">&#x1F4BE; memory.md</span><span class="tag tpu">&#x1F92B; Silent Learning</span><span class="tag ttl">&#x1F331; Improves Over Time</span></div>
+</div>
+
+<div class="card cro">
+  <div class="ch"><div class="chi">&#x26A0;&#xFE0F;</div><div><div class="cht">Common Mistakes to Avoid</div><div class="chs">What makes claude.md useless or counterproductive</div></div></div>
+  <div class="items">
+    <div class="item"><div class="dot">!</div><span><b>Bloated file</b> &mdash; exceeding ~200 lines buries important rules in noise; AI context has limits</span></div>
+    <div class="item"><div class="dot">!</div><span><b>Treating it as static</b> &mdash; never updating means Claude Code works from stale, incorrect context</span></div>
+    <div class="item"><div class="dot">!</div><span><b>One giant root file</b> &mdash; dump all subdirectory rules into one file instead of using folder-specific files</span></div>
+    <div class="item"><div class="dot">!</div><span><b>Ignoring memory.md</b> &mdash; auto-memory can accumulate incorrect patterns; periodically review and prune it</span></div>
+    <div class="item"><div class="dot">!</div><span><b>Missing global folder</b> &mdash; forgetting to set up <span class="pill">~/.claude</span> loses personal cross-project settings</span></div>
+  </div>
+  <div class="tags"><span class="tag tro">&#x1F4C4; Bloated File</span><span class="tag tro">&#x23F8;&#xFE0F; Stale Context</span><span class="tag tro">&#x1F5C2;&#xFE0F; Monolithic Rules</span><span class="tag tro">&#x1F9E0; Unchecked Memory</span></div>
+</div>
+
+<div class="card cgn">
+  <div class="ch"><div class="chi">&#x1F4CA;</div><div><div class="cht">Healthy Setup Indicators</div><div class="chs">Signs your claude.md workflow is working optimally</div></div></div>
+  <div class="cklist">
+    <div class="cki"><div class="ckb">&#x2713;</div><span><b>Zero re-explaining</b> &mdash; Claude Code already knows your project from the file</span></div>
+    <div class="cki"><div class="ckb">&#x2713;</div><span><b>Consistent output style</b> &mdash; generated code matches naming and formatting conventions automatically</span></div>
+    <div class="cki"><div class="ckb">&#x2713;</div><span><b>File under 200 lines</b> &mdash; concise, high-signal instructions that load cleanly into every session</span></div>
+    <div class="cki"><div class="ckb">&#x2713;</div><span><b>memory.md periodically reviewed</b> &mdash; auto-learned preferences audited so nothing incorrect accumulates</span></div>
+    <div class="cki"><div class="ckb">&#x2713;</div><span><b>Both folder scopes used</b> &mdash; project-level for team rules, global for personal cross-project preferences</span></div>
+  </div>
+  <div class="tags"><span class="tag tgn">&#x2705; Zero Re-Explaining</span><span class="tag tgn">&#x1F3AF; Consistent Output</span><span class="tag tgn">&#x1F4CF; Concise File</span><span class="tag tam">&#x1F9E0; Audited Memory</span></div>
+</div>
+
+<div class="card csl full">
+  <div class="ch"><div class="chi">&#x1F3C1;</div><div><div class="cht">Key Takeaways &mdash; The claude.md Mental Model</div><div class="chs">Internalize these to unlock consistent, context-aware AI coding sessions</div></div></div>
+  <div class="items">
+    <div class="item"><div class="dot">&#x2605;</div><span><b>claude.md = AI's long-term memory</b> &mdash; the only bridge between sessions; without it Claude starts fresh every time</span></div>
+    <div class="item"><div class="dot">&#x2605;</div><span><b>.claude folder has two scopes</b> &mdash; project-level (Git-shared) and global (home directory) &mdash; use both intentionally</span></div>
+    <div class="item"><div class="dot">&#x2605;</div><span><b>Auto-memory reduces upkeep</b> &mdash; but requires occasional auditing; silent learning can learn wrong things</span></div>
+    <div class="item"><div class="dot">&#x2605;</div><span><b>Modular beats monolithic</b> &mdash; folder-specific claude.md files scale better than one bloated root file</span></div>
+    <div class="item"><div class="dot">&#x2605;</div><span><b>Treat it as code</b> &mdash; version-control it, update with every convention change, review in PRs</span></div>
+  </div>
+  <div class="tags"><span class="tag tbl">&#x1F4C4; Session Memory</span><span class="tag tpu">&#x1F5C2;&#xFE0F; Two Scopes</span><span class="tag ttl">&#x1F9E9; Modular</span><span class="tag tgn">&#x1F504; Treat as Code</span><span class="tag tam">&#x1F9E0; Audit Memory</span></div>
+</div>
+
+</div></div>
+<script>
+const WDS=['ctx','md','[]','.cl','init','mem','key','cfg','//','{}','val','env','API','&rarr;'];
+const CLS=['rgba(26,82,204,','rgba(10,122,110,','rgba(107,53,217,','rgba(154,100,0,','rgba(26,122,60,'];
+
+/* PARTICLES */
+(function(){
+const c=document.getElementById('ptc'),ctx=c.getContext('2d');
+let W,H,pts=[];
+function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+function sp(){return{x:Math.random()*W,y:H+10,vx:(Math.random()-.5)*.26,vy:-Math.random()*.4-.07,a:Math.random()*.11+.03,sz:Math.random()*2.5+6.5,w:WDS[~~(Math.random()*WDS.length)],cl:CLS[~~(Math.random()*CLS.length)],life:0,ml:~~(Math.random()*340)+160}}
+resize();
+for(let i=0;i<38;i++){const p=sp();p.y=Math.random()*H;pts.push(p)}
+function draw(){ctx.clearRect(0,0,W,H);pts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;p.life++;const f=p.life<30?p.life/30:p.life>p.ml-30?(p.ml-p.life)/30:1;ctx.font=`600 ${p.sz}px 'JetBrains Mono',monospace`;ctx.fillStyle=p.cl+(p.a*f)+')';ctx.fillText(p.w,p.x,p.y);if(p.life>=p.ml||p.y<-20)pts[i]=sp();});requestAnimationFrame(draw);}
+window.addEventListener('resize',resize);draw();
+})();
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:.08});
+document.querySelectorAll('.card,.kc,.cc').forEach(el=>obs.observe(el));
+/* BARS */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.querySelectorAll('.seg[data-w]').forEach((s,i)=>setTimeout(()=>{s.style.width=s.dataset.w+'%'},480+i*80))},400);
+  setTimeout(()=>{document.querySelectorAll('.pf[data-w]').forEach((f,i)=>setTimeout(()=>{f.style.width=f.dataset.w+'%'},650+i*130))},500);
+});
+/* COUNTER */
+function cUp(el,t,s,d){if(!el)return;const st=performance.now();(function r(n){const p=Math.min((n-st)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*t)+s;if(p<1)requestAnimationFrame(r)})(performance.now())}
+setTimeout(()=>{const k=document.getElementById('ctr');if(k)cUp(k,parseInt(k.dataset.t),k.dataset.s||'',1400)},900);
+/* CLICK RIPPLE */
+const rs=document.createElement('style');rs.textContent='@keyframes ripOut{to{transform:scale(1);opacity:0}}';document.head.appendChild(rs);
+document.querySelectorAll('.card,.kc').forEach(el=>{el.addEventListener('click',e=>{const r=document.createElement('span'),rect=el.getBoundingClientRect(),sz=Math.max(rect.width,rect.height)*2;r.className='rw';r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;el.appendChild(r);setTimeout(()=>r.remove(),750)})});
+/* SCROLL HUE SHIFT */
+window.addEventListener('scroll',()=>{document.documentElement.style.setProperty('--hs',Math.min(scrollY/6000*16,16)+'deg')},{passive:true});
+
+
+</script></body></html>

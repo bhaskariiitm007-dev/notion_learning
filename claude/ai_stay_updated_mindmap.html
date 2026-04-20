@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>AI Stay Updated — Mind Map</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{
+  --bg:#F7F6F2;--sf:#FFFFFF;--sf2:#F0EDE6;--bd:rgba(0,0,0,0.08);
+  --tx:#1C1917;--mu:#78716C;
+  --G:#059669;--Gl:#ECFDF5;--Gm:#D1FAE5;--Gb:#6EE7B7;
+  --R:#DC2626;--Rl:#FEF2F2;--Rm:#FECACA;--Rb:#FCA5A5;
+  --B:#2563EB;--Bl:#EFF6FF;--Bm:#DBEAFE;--Bb:#93C5FD;
+  --P:#7C3AED;--Pl:#F5F3FF;--Pm:#EDE9FE;--Pb:#C4B5FD;
+  --O:#EA580C;--Ol:#FFF7ED;--Om:#FFEDD5;--Ob:#FDBA74;
+  --A:#D97706;--Al:#FFFBEB;--Am:#FEF3C7;--Ab:#FCD34D;
+  --T:#0891B2;--Tl:#ECFEFF;--Tm:#CFFAFE;--Tb:#67E8F9;
+  --K:#DB2777;--Kl:#FDF2F8;--Km:#FCE7F3;--Kb:#F9A8D4;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;}
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:180px;opacity:0.55;}
+/* AURORA */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.ab{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.12;will-change:transform;}
+.ab1{width:560px;height:560px;background:radial-gradient(circle,#6EE7B7,transparent);top:-160px;left:-100px;animation:af1 18s ease-in-out infinite alternate;}
+.ab2{width:460px;height:460px;background:radial-gradient(circle,#C4B5FD,transparent);top:40px;right:-70px;animation:af2 22s ease-in-out infinite alternate;}
+.ab3{width:380px;height:380px;background:radial-gradient(circle,#93C5FD,transparent);bottom:80px;left:30%;animation:af3 20s ease-in-out infinite alternate;}
+.ab4{width:300px;height:300px;background:radial-gradient(circle,#FCD34D,transparent);bottom:-50px;right:12%;animation:af4 25s ease-in-out infinite alternate;}
+@keyframes af1{0%{transform:translate(0,0) scale(1);}100%{transform:translate(40px,28px) scale(1.18);}}
+@keyframes af2{0%{transform:translate(0,0);}100%{transform:translate(-34px,24px) scale(1.14);}}
+@keyframes af3{0%{transform:translate(0,0);}100%{transform:translate(26px,-20px) scale(1.1);}}
+@keyframes af4{0%{transform:translate(0,0);}100%{transform:translate(-24px,18px) scale(1.16);}}
+/* PARTICLES */
+#pcvs{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;}
+/* PAGE */
+.page{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:28px 16px 48px;}
+/* KPI ROW */
+.kr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+@media(max-width:600px){.kr{grid-template-columns:repeat(2,1fr);}}
+.kpi{background:var(--sf);border-radius:16px;padding:18px 12px;text-align:center;border:1.5px solid var(--bd);position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;will-change:transform;}
+.kpi:hover{transform:translateY(-6px) rotate(1deg) scale(1.02);box-shadow:0 10px 28px rgba(0,0,0,.1);}
+.kpi::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--ka),var(--kb));opacity:.07;transition:opacity .3s;}
+.kpi:hover::before{opacity:.15;}
+/* Scan line */
+.kpi::after{content:'';position:absolute;top:-40%;left:0;right:0;height:40%;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.55),transparent);animation:scan 4s ease-in-out infinite;pointer-events:none;}
+@keyframes scan{0%,100%{top:-40%;}50%{top:140%;}}
+.kv{font-size:30px;font-weight:900;line-height:1;margin-bottom:4px;}
+.kl{font-size:10.5px;color:var(--mu);line-height:1.4;font-weight:500;}
+.kpi:nth-child(1){--ka:var(--G);--kb:var(--T);}.kpi:nth-child(1) .kv{color:var(--G);}
+.kpi:nth-child(2){--ka:var(--A);--kb:var(--O);}.kpi:nth-child(2) .kv{color:var(--A);}
+.kpi:nth-child(3){--ka:var(--B);--kb:var(--P);}.kpi:nth-child(3) .kv{color:var(--B);}
+.kpi:nth-child(4){--ka:var(--R);--kb:var(--K);}.kpi:nth-child(4) .kv{color:var(--R);}
+/* SECTION LABEL */
+.slbl{display:flex;align-items:center;gap:10px;margin:20px 0 11px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mu);}
+.slbl::before,.slbl::after{content:'';flex:1;height:1px;background:var(--bd);}
+/* MINDSET CHIPS */
+.mc-row{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:20px;}
+@media(max-width:600px){.mc-row{grid-template-columns:1fr;}}
+.mc{background:var(--sf);border:1.5px solid var(--Gm);border-radius:15px;padding:18px 14px;text-align:center;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,border-color .3s;}
+.mc:hover{transform:translateY(-5px);box-shadow:0 10px 26px rgba(5,150,105,.1);border-color:var(--G);}
+.mc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--Gl),transparent);opacity:0;transition:opacity .3s;}
+.mc:hover::after{opacity:1;}
+.mcico{font-size:30px;display:block;margin-bottom:9px;animation:ifl 3s ease-in-out infinite;position:relative;z-index:1;}
+.mc:nth-child(2) .mcico{animation-delay:-1s;}.mc:nth-child(3) .mcico{animation-delay:-2s;}
+@keyframes ifl{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.mclbl{font-size:12.5px;font-weight:800;color:var(--G);margin-bottom:4px;position:relative;z-index:1;}
+.mcdsc{font-size:11px;color:var(--mu);line-height:1.5;position:relative;z-index:1;}
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+.full{grid-column:1/-1;}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr;}.full{grid-column:auto;}}
+/* CARD */
+.card{background:var(--sf);border-radius:18px;padding:20px;border:1.5px solid var(--bd);position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;will-change:transform;}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,.09);}
+/* Top bar */
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3.5px;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:18px 18px 0 0;transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
+.card:hover::before{transform:scaleX(1);}
+/* Color variants */
+.card.G{--c1:var(--G);--c2:var(--T);background:linear-gradient(160deg,#fff 58%,var(--Gl));}
+.card.R{--c1:var(--R);--c2:var(--K);background:linear-gradient(160deg,#fff 58%,var(--Rl));}
+.card.B{--c1:var(--B);--c2:var(--P);background:linear-gradient(160deg,#fff 58%,var(--Bl));}
+.card.P{--c1:var(--P);--c2:var(--B);background:linear-gradient(160deg,#fff 58%,var(--Pl));}
+.card.O{--c1:var(--O);--c2:var(--A);background:linear-gradient(160deg,#fff 58%,var(--Ol));}
+.card.A{--c1:var(--A);--c2:var(--O);background:linear-gradient(160deg,#fff 58%,var(--Al));}
+.card.T{--c1:var(--T);--c2:var(--G);background:linear-gradient(160deg,#fff 58%,var(--Tl));}
+.card.K{--c1:var(--K);--c2:var(--P);background:linear-gradient(160deg,#fff 58%,var(--Kl));}
+/* Card header */
+.ch{display:flex;align-items:center;gap:11px;margin-bottom:15px;padding-bottom:13px;border-bottom:1.5px solid var(--bd);}
+.ci{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.card:hover .ci{transform:rotate(-10deg) scale(1.14);}
+.G .ci{background:var(--Gm);}.R .ci{background:var(--Rm);}.B .ci{background:var(--Bm);}
+.P .ci{background:var(--Pm);}.O .ci{background:var(--Om);}.A .ci{background:var(--Am);}
+.T .ci{background:var(--Tm);}.K .ci{background:var(--Km);}
+.ct{font-size:13.5px;font-weight:800;letter-spacing:-.2px;}.cs{font-size:10.5px;color:var(--mu);margin-top:1px;}
+.G .ct{color:var(--G);}.R .ct{color:var(--R);}.B .ct{color:var(--B);}.P .ct{color:var(--P);}
+.O .ct{color:var(--O);}.A .ct{color:var(--A);}.T .ct{color:var(--T);}.K .ct{color:var(--K);}
+/* ITEMS */
+.items{display:flex;flex-direction:column;gap:5px;}
+.item{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.55;color:#44403C;padding:6px 8px;border-radius:8px;transition:background .15s,transform .18s;opacity:0;transform:translateX(-10px);}
+.item.vis{opacity:1;transform:translateX(0);transition:opacity .38s ease,transform .38s ease,background .15s;}
+.item:hover{background:var(--sf2);transform:translateX(4px)!important;}
+.item b{color:var(--tx);font-weight:700;}
+.ii{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.G .ii{background:var(--Gm);color:var(--G);}.R .ii{background:var(--Rm);color:var(--R);}
+.B .ii{background:var(--Bm);color:var(--B);}.P .ii{background:var(--Pm);color:var(--P);}
+.O .ii{background:var(--Om);color:var(--O);}.A .ii{background:var(--Am);color:var(--A);}
+.T .ii{background:var(--Tm);color:var(--T);}.K .ii{background:var(--Km);color:var(--K);}
+/* PILL */
+.pill{display:inline;background:var(--sf2);border:1px solid var(--bd);border-radius:5px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--P);}
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px;}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;font-size:10.5px;font-weight:700;border:1.5px solid;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;}
+.tag:hover{transform:scale(1.1);box-shadow:0 3px 12px rgba(0,0,0,.09);}
+.tag.G{background:var(--Gl);border-color:var(--Gb);color:var(--G);}
+.tag.R{background:var(--Rl);border-color:var(--Rb);color:var(--R);}
+.tag.B{background:var(--Bl);border-color:var(--Bb);color:var(--B);}
+.tag.P{background:var(--Pl);border-color:var(--Pb);color:var(--P);}
+.tag.O{background:var(--Ol);border-color:var(--Ob);color:var(--O);}
+.tag.A{background:var(--Al);border-color:var(--Ab);color:var(--A);}
+.tag.T{background:var(--Tl);border-color:var(--Tb);color:var(--T);}
+.tag.K{background:var(--Kl);border-color:var(--Kb);color:var(--K);}
+/* RULE BOX */
+.rbox{border-radius:13px;padding:2px;margin-top:14px;background:linear-gradient(90deg,var(--A),var(--O),var(--G),var(--T),var(--A));background-size:300% auto;animation:bf 3s linear infinite;}
+@keyframes bf{0%{background-position:0%;}100%{background-position:300%;}}
+.rbox-in{background:linear-gradient(135deg,var(--Al),var(--Ol));border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:11px;}
+.remo{font-size:28px;animation:rf 2.2s ease-in-out infinite;flex-shrink:0;}
+@keyframes rf{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg) scale(1.1);}}
+.rtit{font-size:12px;font-weight:800;color:var(--A);margin-bottom:3px;}
+.rdsc{font-size:11.5px;color:#92400E;line-height:1.5;}
+/* FLOW CARD */
+.flow-card{background:var(--sf);border-radius:18px;padding:20px;border:1.5px solid var(--bd);overflow:hidden;}
+.flow-card .ch{margin-bottom:12px;padding-bottom:12px;}
+/* STATUS DOT */
+.sdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--G);position:relative;margin-right:5px;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.sdot::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1.5px solid var(--G);animation:ring 1.8s ease-out infinite;opacity:0;}
+@keyframes ring{0%{transform:scale(1);opacity:.7;}100%{transform:scale(2.3);opacity:0;}}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px;}
+th{background:var(--sf2);padding:8px 11px;text-align:left;font-weight:700;font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--mu);border-bottom:2px solid var(--bd);}
+td{padding:8px 11px;border-bottom:1px solid var(--bd);color:#44403C;vertical-align:top;}
+tr:hover td{background:var(--sf2);}
+tr:last-child td{border-bottom:none;}
+/* RES GRID */
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+@media(max-width:480px){.rg{grid-template-columns:1fr;}}
+.res{background:var(--sf2);border:1.5px solid var(--bd);border-radius:11px;padding:11px;transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;}
+.res:hover{transform:translateY(-3px) scale(1.02);border-color:var(--Bb);box-shadow:0 7px 20px rgba(37,99,235,.09);}
+.rnam{font-size:11px;font-weight:800;color:var(--B);margin-bottom:2px;}
+.rdsc{font-size:10.5px;color:var(--mu);line-height:1.4;}
+/* PROGRESS BAR */
+.pbar-wrap{margin-top:10px;}
+.pbar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:11px;}
+.pbar-lbl{width:90px;color:var(--tx);font-weight:600;flex-shrink:0;}
+.pbar-track{flex:1;height:8px;background:var(--sf2);border-radius:99px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:99px;width:0%;transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+.pbar-pct{width:30px;text-align:right;color:var(--mu);font-size:10px;}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,1,.36,1);}
+.reveal.vis{opacity:1;transform:translateY(0);}
+/* CLICK RIPPLE */
+.ripple-host{position:relative;overflow:hidden;}
+@keyframes rpl{to{transform:scale(2.5);opacity:0;}}
+</style>
+</head>
+<body>
+<div class="aurora"><div class="ab ab1"></div><div class="ab ab2"></div><div class="ab ab3"></div><div class="ab ab4"></div></div>
+<svg id="pcvs" style="position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%;"></svg>
+<div class="page">
+
+<div class="kr reveal">
+  <div class="kpi"><div class="kv"><span data-to="1">0</span>%</div><div class="kl">Daily improvement<br>target</div></div>
+  <div class="kpi"><div class="kv"><span data-to="2">0</span>wk</div><div class="kl">Wait before testing<br>any new tool</div></div>
+  <div class="kpi"><div class="kv"><span data-to="5">0</span></div><div class="kl">Max trusted<br>sources to follow</div></div>
+  <div class="kpi"><div class="kv"><span data-to="0">0</span></div><div class="kl">Passive scroll<br>sessions/day</div></div>
+</div>
+<div class="mc-row reveal">
+  <div class="mc"><span class="mcico">🏁</span><div class="mclbl">You Are Not Late</div><div class="mcdsc">AI is vast. Nobody knows everything. Stop treating learning as a race.</div></div>
+  <div class="mc"><span class="mcico">📈</span><div class="mclbl">1% Daily System</div><div class="mcdsc">Compound growth beats frantic consumption. Consistency over intensity.</div></div>
+  <div class="mc"><span class="mcico">🎯</span><div class="mclbl">Signal Over Noise</div><div class="mcdsc">Most AI "news" is marketing. Filter ruthlessly, act on what survives.</div></div>
+</div>
+<div class="slbl reveal">Core Framework</div>
+<div class="g2 reveal">
+  <div class="card R">
+    <div class="ch"><div class="ci">🚨</div><div><div class="ct">Noise Sources — Eliminate</div><div class="cs">If it makes you feel behind → it's noise</div></div></div>
+    <div class="items">
+      <div class="item"><div class="ii">✕</div><span><b>LinkedIn/Instagram AI posts</b> — engagement bait, rarely actionable</span></div>
+      <div class="item"><div class="ii">✕</div><span><b>Founder-led hype</b> — products to sell → inflate capabilities for clicks</span></div>
+      <div class="item"><div class="ii">✕</div><span><b>Marketing clickbait</b> — fear-based "AI will replace you" headlines</span></div>
+      <div class="item"><div class="ii">✕</div><span><b>Course FOMO</b> — urgency exists to make you buy, not to help you learn</span></div>
+      <div class="item"><div class="ii">✕</div><span><b>Hype-cycle tools</b> — viral tools vanishing in 2 weeks were never worth your time</span></div>
+    </div>
+    <div class="tags"><span class="tag R">📢 Hype Cycle</span><span class="tag R">😨 FOMO</span><span class="tag O">📱 Passive Scroll</span></div>
+  </div>
+  <div class="card G">
+    <div class="ch"><div class="ci">⚡</div><div><div class="ct">Proactive Learning System</div><div class="cs">Active beats passive — always</div></div></div>
+    <div class="items">
+      <div class="item"><div class="ii">✓</div><span><b>Hands-on exploration</b> — test tools personally, not just demo-watching</span></div>
+      <div class="item"><div class="ii">✓</div><span><b>Document learnings</b> — write notes, build prototypes for genuine retention</span></div>
+      <div class="item"><div class="ii">✓</div><span><b>Scheduled blocks</b> — fixed weekly AI time, never opportunistic scrolling</span></div>
+      <div class="item"><div class="ii">✓</div><span><b>Build things</b> — implementation = 10× understanding vs reading alone</span></div>
+    </div>
+    <div class="rbox"><div class="rbox-in"><span class="remo">⏳</span><div><div class="rtit">⭐ THE TWO-WEEK RULE</div><div class="rdsc">New AI tool goes viral? <b>Wait 2 weeks.</b> Still relevant → worth your time. Gone → you saved hours of wasted energy.</div></div></div></div>
+  </div>
+</div>
+<div class="g2 reveal">
+  <div class="card P">
+    <div class="ch"><div class="ci">🏛️</div><div><div class="ct">Build Fundamentals First</div><div class="cs">Core knowledge contextualises every new release</div></div></div>
+    <div class="items">
+      <div class="item"><div class="ii">1</div><span><b>How LLMs work</b> — attention, tokens, RLHF, context windows</span></div>
+      <div class="item"><div class="ii">2</div><span><b>DL history</b> — AlexNet → GANs → Transformers → GPT-4</span></div>
+      <div class="item"><div class="ii">3</div><span><b>AI architecture layers</b> — data → training → inference → serving</span></div>
+      <div class="item"><div class="ii">4</div><span>Core: <span class="pill">embeddings</span> <span class="pill">RAG</span> <span class="pill">fine-tuning</span> <span class="pill">agents</span></span></div>
+    </div>
+    <div class="tags"><span class="tag P">🧮 LLM Arch</span><span class="tag P">📜 DL History</span><span class="tag T">🗂️ AI Stack</span></div>
+  </div>
+  <div class="card B">
+    <div class="ch"><div class="ci">📡</div><div><div class="ct">Curated Signal Sources</div><div class="cs">Follow few, follow deeply</div></div></div>
+    <div class="rg">
+      <div class="res"><div style="font-size:18px;margin-bottom:5px">𝕏</div><div class="rnam">Researchers on X</div><div class="rdsc">5–8 AI researchers, not influencers</div></div>
+      <div class="res"><div style="font-size:18px;margin-bottom:5px">▶️</div><div class="rnam">YouTube (2–3 channels)</div><div class="rdsc">Technical depth, not hot takes</div></div>
+      <div class="res"><div style="font-size:18px;margin-bottom:5px">📧</div><div class="rnam">1–2 Newsletters</div><div class="rdsc">Curated weekly AI signal</div></div>
+      <div class="res"><div style="font-size:18px;margin-bottom:5px">📝</div><div class="rnam">Substack Deep-Dives</div><div class="rdsc">Long-form practitioner essays</div></div>
+    </div>
+    <div class="tags" style="margin-top:9px"><span class="tag B">🎯 5 Sources Max</span><span class="tag T">🔬 Primary First</span></div>
+  </div>
+</div>
+<div class="g2 reveal">
+  <div class="card O">
+    <div class="ch"><div class="ci">⚠️</div><div><div class="ct">Burnout Pitfalls</div><div class="cs">What causes information overload</div></div></div>
+    <div class="items">
+      <div class="item"><div class="ii">!</div><span><b>Reading everything</b> — 100s of AI papers daily → impossible target = burnout</span></div>
+      <div class="item"><div class="ii">!</div><span><b>Chasing every model</b> — evaluating GPT-5, Claude, Gemini weekly = full-time job</span></div>
+      <div class="item"><div class="ii">!</div><span><b>Comparing to Twitter</b> — you see wins only, never hours of confusion</span></div>
+      <div class="item"><div class="ii">!</div><span><b>No system</b> — without rhythm, learning is reactive and quickly forgotten</span></div>
+    </div>
+    <div class="tags"><span class="tag O">🔥 Burnout</span><span class="tag O">😵 Overload</span><span class="tag A">📊 Comparison Trap</span></div>
+  </div>
+  <div class="card A">
+    <div class="ch"><div class="ci">📊</div><div><div class="ct">Healthy System KPIs</div><div class="cs">Track these to confirm the system works</div></div></div>
+    <div class="pbar-wrap">
+      <div class="pbar-row"><span class="pbar-lbl">Built this week</span><div class="pbar-track"><div class="pbar-fill" data-pct="80" style="background:var(--G)"></div></div><span class="pbar-pct">80%</span></div>
+      <div class="pbar-row"><span class="pbar-lbl">Can explain it</span><div class="pbar-track"><div class="pbar-fill" data-pct="70" style="background:var(--B)"></div></div><span class="pbar-pct">70%</span></div>
+      <div class="pbar-row"><span class="pbar-lbl">Tested hands-on</span><div class="pbar-track"><div class="pbar-fill" data-pct="60" style="background:var(--P)"></div></div><span class="pbar-pct">60%</span></div>
+      <div class="pbar-row"><span class="pbar-lbl">Noise pruned</span><div class="pbar-track"><div class="pbar-fill" data-pct="90" style="background:var(--R)"></div></div><span class="pbar-pct">90%</span></div>
+      <div class="pbar-row"><span class="pbar-lbl">Energy level</span><div class="pbar-track"><div class="pbar-fill" data-pct="85" style="background:var(--T)"></div></div><span class="pbar-pct">85%</span></div>
+    </div>
+  </div>
+</div>
+<div class="slbl reveal">Daily / Weekly Repeatable System — Compounds Over Time</div>
+<div class="flow-card reveal">
+  <div class="ch"><div class="ci">🔄</div><div><div class="ct">Run this loop every week — 1% compounds into transformation</div><div class="cs"><span class="sdot"></span>Consistent beats intense</div></div></div>
+  <svg width="100%" viewBox="0 0 1062 114" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible"><defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L7 4L1 7" fill="none" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/></marker></defs><rect x="14" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="19" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="28" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">1</text><text x="69" y="50" text-anchor="middle" font-size="18">🧘</text><text x="69" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">Mindset Reset</text><text x="69" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">Not late</text><line x1="127" y1="52" x2="158" y2="52" stroke="#059669" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.55" marker-end="url(#ah)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.8s" repeatCount="indefinite"/></line><circle r="3" fill="#059669" opacity="0.95"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 127 52 L 157 52"/></circle><rect x="168" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="173" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="182" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">2</text><text x="223" y="50" text-anchor="middle" font-size="18">🔍</text><text x="223" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">Filter</text><text x="223" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">Signal/Noise</text><line x1="281" y1="52" x2="312" y2="52" stroke="#059669" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.55" marker-end="url(#ah)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.8s" repeatCount="indefinite"/></line><circle r="3" fill="#059669" opacity="0.95"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 281 52 L 311 52"/></circle><rect x="322" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="327" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="336" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">3</text><text x="377" y="50" text-anchor="middle" font-size="18">⏳</text><text x="377" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">2-Wk Rule</text><text x="377" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">New tool? Wait</text><line x1="435" y1="52" x2="466" y2="52" stroke="#059669" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.55" marker-end="url(#ah)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.8s" repeatCount="indefinite"/></line><circle r="3" fill="#059669" opacity="0.95"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 435 52 L 465 52"/></circle><rect x="476" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="481" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="490" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">4</text><text x="531" y="50" text-anchor="middle" font-size="18">🛠️</text><text x="531" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">Hands-On</text><text x="531" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">Build it</text><line x1="589" y1="52" x2="620" y2="52" stroke="#059669" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.55" marker-end="url(#ah)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.8s" repeatCount="indefinite"/></line><circle r="3" fill="#059669" opacity="0.95"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 589 52 L 619 52"/></circle><rect x="630" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="635" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="644" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">5</text><text x="685" y="50" text-anchor="middle" font-size="18">📓</text><text x="685" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">Document</text><text x="685" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">Notes→retain</text><line x1="743" y1="52" x2="774" y2="52" stroke="#059669" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.55" marker-end="url(#ah)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.8s" repeatCount="indefinite"/></line><circle r="3" fill="#059669" opacity="0.95"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 743 52 L 773 52"/></circle><rect x="784" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="789" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="798" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">6</text><text x="839" y="50" text-anchor="middle" font-size="18">🏛️</text><text x="839" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">Fundamentals</text><text x="839" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">Context→insight</text><line x1="897" y1="52" x2="928" y2="52" stroke="#059669" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.55" marker-end="url(#ah)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.8s" repeatCount="indefinite"/></line><circle r="3" fill="#059669" opacity="0.95"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 897 52 L 927 52"/></circle><rect x="938" y="14" width="110" height="76" rx="10" fill="white" stroke="#E5E3DC" stroke-width="1.5"/><rect x="943" y="19" width="18" height="18" rx="5" fill="#059669" opacity="0.18"/><text x="952" y="31" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="800" fill="#059669">7</text><text x="993" y="50" text-anchor="middle" font-size="18">📈</text><text x="993" y="66" text-anchor="middle" font-family="Outfit,sans-serif" font-size="10" font-weight="700" fill="#1C1917">+1% Better</text><text x="993" y="78" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8.5" fill="#78716C">Compound</text></svg>
+</div>
+</div>
+<script>
+// Scroll reveal
+const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');ro.unobserve(x.target);}});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// Item stagger on card visible
+const io2=new IntersectionObserver(e=>{
+  e.forEach(x=>{if(x.isIntersecting){
+    x.target.querySelectorAll('.item').forEach((it,i)=>setTimeout(()=>it.classList.add('vis'),i*55));
+    io2.unobserve(x.target);
+  }});
+},{threshold:.1});
+document.querySelectorAll('.card,.flow-card').forEach(c=>io2.observe(c));
+
+// Counter
+document.querySelectorAll('[data-to]').forEach(el=>{
+  let done=false;
+  new IntersectionObserver(en=>{
+    if(en[0].isIntersecting&&!done){done=true;
+      let c=0,t=+el.dataset.to,s=Math.max(1,Math.ceil(t/25));
+      const tm=setInterval(()=>{c=Math.min(c+s,t);el.textContent=c;if(c>=t)clearInterval(tm);},44);}
+  },{threshold:.4}).observe(el.closest('.kr')||el);
+});
+
+// Progress bars
+document.querySelectorAll('.pbar-fill[data-pct]').forEach(el=>{
+  let done=false;
+  new IntersectionObserver(en=>{
+    if(en[0].isIntersecting&&!done){done=true;setTimeout(()=>el.style.width=el.dataset.pct+'%',100);}
+  },{threshold:.3}).observe(el);
+});
+
+// Click ripple
+document.querySelectorAll('.card,.kpi,.ripple-host').forEach(el=>{
+  el.classList.add('ripple-host');
+  el.addEventListener('click',function(e){
+    const rp=document.createElement('span'),r=this.getBoundingClientRect(),sz=Math.max(r.width,r.height);
+    rp.style.cssText=`position:absolute;border-radius:50%;width:${sz}px;height:${sz}px;left:${e.clientX-r.left-sz/2}px;top:${e.clientY-r.top-sz/2}px;background:rgba(0,0,0,.04);transform:scale(0);animation:rpl .5s ease forwards;pointer-events:none;z-index:10;`;
+    this.appendChild(rp);setTimeout(()=>rp.remove(),520);
+  });
+});
+
+// Scroll hue shift (subtle)
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight||1);
+  document.body.style.filter=`hue-rotate(${pct*10}deg)`;
+},{passive:true});
+
+// Particles
+(function(){
+  const svg=document.getElementById('pcvs');if(!svg)return;
+  const W=window.innerWidth,H=window.innerHeight;
+  const cols=['#6EE7B7','#C4B5FD','#93C5FD','#FCD34D','#FDBA74'];
+  const N=22,pts=[];
+  for(let i=0;i<N;i++){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    const r=Math.random()*2+1,x=Math.random()*W,y=Math.random()*H;
+    c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',r);
+    c.setAttribute('fill',cols[i%cols.length]);c.setAttribute('opacity','0.22');
+    svg.appendChild(c);pts.push({el:c,x,y,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32});
+  }
+  const lines=[];
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('stroke','#059669');l.setAttribute('opacity','0');l.setAttribute('stroke-width','0.5');
+    svg.insertBefore(l,svg.firstChild);lines.push({el:l,a:i,b:j});
+  }
+  function tick(){
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;p.el.setAttribute('cx',p.x);p.el.setAttribute('cy',p.y);});
+    lines.forEach(l=>{const a=pts[l.a],b=pts[l.b],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<105){l.el.setAttribute('x1',a.x);l.el.setAttribute('y1',a.y);l.el.setAttribute('x2',b.x);l.el.setAttribute('y2',b.y);l.el.setAttribute('opacity',(1-d/105)*.17);}
+      else l.el.setAttribute('opacity',0);});
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>
