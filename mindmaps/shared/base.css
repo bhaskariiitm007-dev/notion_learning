@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════
    base.css  —  Shared design system for all CampusX mind maps
    Warm Light palette · Outfit + JetBrains Mono · Full animation stack
+   v2: + card top-border sweep hover · + flow step auto-cycle active state
 ═══════════════════════════════════════════════════════════════ */
 
 /* ── GOOGLE FONTS ── */
@@ -240,12 +241,35 @@ body {
   border-color:    var(--c-border, var(--border));
   background:      linear-gradient(145deg, var(--surface) 55%, var(--c-bg, transparent));
 }
+
 /* Card Bar top stripe */
 .mm-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0;
   height: 3px; border-radius: 16px 16px 0 0;
   background: var(--c-accent, var(--or));
+  z-index: 1;
 }
+
+/* ── Top-Border Hover Sweep (v2) ──
+   A white shimmer slides left→right across the 3px accent stripe on hover.
+   Uses ::after so it overlays the ::before stripe cleanly. */
+.mm-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 45%; height: 3px;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+  transform: translateX(-120%);
+  pointer-events: none;
+  z-index: 2;
+}
+.mm-card:hover::after { animation: topSweep .6s ease forwards; }
+@keyframes topSweep {
+  from { transform: translateX(-120%); }
+  to   { transform: translateX(340%);  }
+}
+
 /* Scroll-reveal entrance — odd left, even right */
 .mm-card.mm-visible { opacity: 1; }
 .mm-card.mm-visible:nth-child(odd)  { animation: cardInL .5s cubic-bezier(.34,1.2,.64,1) both; }
@@ -253,7 +277,11 @@ body {
 @keyframes cardInL { from{opacity:0;transform:translateX(-22px)} to{opacity:1;transform:translateX(0)} }
 @keyframes cardInR { from{opacity:0;transform:translateX(22px)}  to{opacity:1;transform:translateX(0)} }
 
-.mm-card.mm-visible:hover { transform: translateY(-4px); box-shadow: 0 14px 34px var(--c-shadow, rgba(232,98,10,.18)); border-color: var(--c-accent, var(--or)); }
+.mm-card.mm-visible:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px var(--c-shadow, rgba(232,98,10,.18));
+  border-color: var(--c-accent, var(--or));
+}
 
 /* Card Header */
 .mm-card-head {
@@ -374,7 +402,7 @@ body {
   background: var(--s2); border: 1.5px solid var(--border); border-radius: 11px;
   padding: clamp(8px,1.4vw,13px) clamp(4px,.8vw,9px);
   text-align: center; position: relative; overflow: hidden; cursor: default;
-  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .3s;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s, border-color .35s, background .35s;
 }
 /* Step Highlight underline */
 .mm-step::before {
@@ -386,6 +414,17 @@ body {
 .mm-step:hover { transform: translateY(-6px); border-color: var(--flow-border, var(--or-b)); box-shadow: 0 8px 20px var(--flow-shadow, rgba(232,98,10,.15)); }
 .mm-step:hover::before { transform: scaleX(1); }
 .mm-step:hover .mm-step-ico { transform: scale(1.2) rotate(-8deg); }
+
+/* ── Active Step (set by JS cycle — v2) ──
+   Applied one-at-a-time to walk through each flow step automatically */
+.mm-step-active {
+  transform: translateY(-6px) !important;
+  border-color: var(--flow-border, var(--or-b)) !important;
+  box-shadow: 0 10px 26px var(--flow-shadow, rgba(232,98,10,.22)) !important;
+  background: linear-gradient(145deg, var(--surface, #fff), var(--flow-num-bg, var(--or-bg))) !important;
+}
+.mm-step-active::before { transform: scaleX(1) !important; }
+.mm-step-active .mm-step-ico { transform: scale(1.18) rotate(-6deg); }
 
 /* Numbered Badge */
 .mm-step-num {

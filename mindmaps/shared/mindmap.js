@@ -1,5 +1,6 @@
 /**
  * mindmap.js  —  Shared runtime for all CampusX mind map pages
+ * v2: + initFlowCycle() — sequential auto-highlight of flow steps
  *
  * Exports / initialises:
  *   MindMap.initParticles(tokens, hues?)  — floating token canvas
@@ -8,6 +9,7 @@
  *   MindMap.initRipple()                  — click-ripple on .mm-kpi + .mm-card
  *   MindMap.initParallax()                — aurora blob parallax on scroll
  *   MindMap.initColorShift(maxDeg?)       — hue-rotate page on scroll
+ *   MindMap.initFlowCycle(interval?)      — auto-cycle .mm-step-active highlight
  *   MindMap.init(tokens, hues?, maxDeg?)  — call all of the above at once
  */
 
@@ -165,7 +167,33 @@ const MindMap = (() => {
   }
 
   /* ─────────────────────────────────────────
-     7. INIT ALL  — convenience entry point
+     7. FLOW CYCLE  (v2 — new)
+     Sequentially highlights each .mm-step in
+     every .mm-flow on the page, one at a time,
+     cycling continuously. Adds/removes the
+     .mm-step-active class (styled in base.css).
+     interval : ms between step advances (default 1200)
+  ───────────────────────────────────────── */
+  function initFlowCycle(interval = 1200) {
+    document.querySelectorAll('.mm-flow').forEach(flow => {
+      const steps = Array.from(flow.querySelectorAll('.mm-step'));
+      if (steps.length < 2) return;
+
+      let current = 0;
+
+      // Kick off first highlight immediately
+      steps[0].classList.add('mm-step-active');
+
+      setInterval(() => {
+        steps.forEach(s => s.classList.remove('mm-step-active'));
+        steps[current].classList.add('mm-step-active');
+        current = (current + 1) % steps.length;
+      }, interval);
+    });
+  }
+
+  /* ─────────────────────────────────────────
+     8. INIT ALL  — convenience entry point
   ───────────────────────────────────────── */
   function init(tokens, hues, maxDeg) {
     window.addEventListener('load', () => {
@@ -175,10 +203,11 @@ const MindMap = (() => {
       initRipple();
       initParallax();
       initColorShift(maxDeg);
+      initFlowCycle();
     });
   }
 
   /* Public API */
-  return { init, initParticles, initCounters, initScrollReveal, initRipple, initParallax, initColorShift };
+  return { init, initParticles, initCounters, initScrollReveal, initRipple, initParallax, initColorShift, initFlowCycle };
 
 })();
