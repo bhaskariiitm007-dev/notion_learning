@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Superpowers — Documents, Web & Images</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#1A52C8,transparent 70%);top:-80px;left:-80px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#0A6EAA,transparent 70%);top:40%;right:-120px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#5A7A00,transparent 70%);bottom:-60px;left:35%}
+
+.mm-badge{background:linear-gradient(135deg,var(--bl-bg),#EEF3FE);border-color:var(--bl-b);color:var(--bl)}
+.mm-dot{background:var(--bl)}.mm-dot::after{border-color:var(--bl)}
+.mm-header h1{background-image:linear-gradient(135deg,var(--bl) 0%,var(--sk) 35%,var(--li) 65%,var(--te) 100%)}
+
+.mm-kpi:nth-child(1){--kpi-accent:var(--bl)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--sk)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--li)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--te)}
+
+.pc-1{--chip-bg:var(--bl-bg);--chip-border:var(--bl-b);--chip-color:var(--bl)}.pc-1:hover{box-shadow:0 10px 26px rgba(26,82,200,.18);border-color:var(--bl)!important}
+.pc-2{--chip-bg:var(--sk-bg);--chip-border:var(--sk-b);--chip-color:var(--sk)}.pc-2:hover{box-shadow:0 10px 26px rgba(10,110,170,.18);border-color:var(--sk)!important}
+.pc-3{--chip-bg:var(--li-bg);--chip-border:var(--li-b);--chip-color:var(--li)}.pc-3:hover{box-shadow:0 10px 26px rgba(90,122,0,.18);border-color:var(--li)!important}
+
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-sk{--c-accent:var(--sk);--c-bg:var(--sk-bg);--c-border:var(--sk-b);--c-shadow:rgba(10,110,170,.18)}
+.c-li{--c-accent:var(--li);--c-bg:var(--li-bg);--c-border:var(--li-b);--c-shadow:rgba(90,122,0,.18)}
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-ro{--c-accent:var(--ro);--c-bg:var(--ro-bg);--c-border:var(--ro-b);--c-shadow:rgba(184,24,54,.18)}
+.c-gr{--c-accent:var(--gr);--c-bg:var(--gr-bg);--c-border:var(--gr-b);--c-shadow:rgba(24,122,58,.18)}
+.c-vi{--c-accent:var(--vi);--c-bg:var(--vi-bg);--c-border:var(--vi-b);--c-shadow:rgba(107,63,212,.18)}
+
+.mm-flow-bl{--flow-color:var(--bl);--flow-color2:var(--te);--flow-border:var(--bl-b);--flow-shadow:rgba(26,82,200,.15);--flow-num-bg:var(--bl-bg);--flow-num-border:var(--bl-b)}
+.mm-flow-bl .mm-dash{stroke:var(--bl)}.mm-flow-bl .mm-arrowhead{fill:var(--bl)}.mm-flow-bl .mm-traveldot{fill:var(--bl)}.mm-flow-bl .mm-step-num{color:var(--bl)}
+
+/* 4-power grid */
+.four-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+@media(max-width:500px){.four-grid{grid-template-columns:1fr}}
+.four-box{border-radius:13px;padding:14px;border:1.5px solid;transition:transform .3s,box-shadow .3s}
+.four-box:hover{transform:translateY(-3px)}
+.fb-doc{background:var(--am-bg);border-color:var(--am-b)}.fb-doc:hover{box-shadow:0 6px 18px rgba(192,123,0,.16)}
+.fb-web{background:var(--te-bg);border-color:var(--te-b)}.fb-web:hover{box-shadow:0 6px 18px rgba(10,122,106,.16)}
+.fb-img{background:var(--ro-bg);border-color:var(--ro-b)}.fb-img:hover{box-shadow:0 6px 18px rgba(184,24,54,.16)}
+.fb-sty{background:var(--vi-bg);border-color:var(--vi-b)}.fb-sty:hover{box-shadow:0 6px 18px rgba(107,63,212,.16)}
+.fb-ico{font-size:20px;margin-bottom:6px;display:block}
+.fb-name{font-size:11px;font-weight:800;margin-bottom:4px}
+.fb-doc .fb-name{color:var(--am)}.fb-web .fb-name{color:var(--te)}.fb-img .fb-name{color:var(--ro)}.fb-sty .fb-name{color:var(--vi)}
+.fb-desc{font-size:10.5px;color:var(--muted);line-height:1.4}
+
+/* parallel tasks */
+.parallel-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
+@media(max-width:500px){.parallel-row{grid-template-columns:1fr}}
+.par-task{border-radius:10px;padding:12px;text-align:center;border:1.5px solid;animation:taskPulse 3s ease infinite}
+.par-task:nth-child(1){background:var(--bl-bg);border-color:var(--bl-b);animation-delay:0s}
+.par-task:nth-child(2){background:var(--te-bg);border-color:var(--te-b);animation-delay:1s}
+.par-task:nth-child(3){background:var(--am-bg);border-color:var(--am-b);animation-delay:2s}
+@keyframes taskPulse{0%,100%{opacity:1}50%{opacity:.65}}
+.par-ico{font-size:20px;display:block;margin-bottom:5px}
+.par-status{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.par-task:nth-child(1) .par-status{color:var(--bl)}.par-task:nth-child(2) .par-status{color:var(--te)}.par-task:nth-child(3) .par-status{color:var(--am)}
+.par-desc{font-size:10px;color:var(--muted);line-height:1.35}
+.running-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;animation:blink 1s infinite}
+.par-task:nth-child(1) .running-dot{background:var(--bl)}
+.par-task:nth-child(2) .running-dot{background:var(--te);animation-delay:.3s}
+.par-task:nth-child(3) .running-dot{background:var(--am);animation-delay:.6s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+</style>
+</head>
+<body>
+
+<div class="aurora"><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div></div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>Chapter 4 · Claude AI Crash Course</div>
+    <h1>Claude Superpowers</h1>
+    <p>Documents · Web Research · Images · Writing Style — give Claude real context, get real intelligence</p>
+  </div>
+
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="4">0</div><div class="mm-kpi-label">Superpower areas:<br>Docs/Web/Images/Style</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="50">0</div><div class="mm-kpi-label">Page PDF Claude<br>can read & summarise</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="30">0</div><div class="mm-kpi-label">Web pages searched<br>in a single query</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">∞</div><div class="mm-kpi-label">Tasks in parallel<br>across multiple chats</div></div>
+  </div>
+
+  <div class="mm-chips">
+    <div class="mm-chip pc-1"><span class="chip-icon">📄</span><div class="chip-label">Real Files = Real Power</div><div class="chip-desc">Claude becomes dramatically more useful when given documents with real data.</div></div>
+    <div class="mm-chip pc-2"><span class="chip-icon">🌐</span><div class="chip-label">Live Web Search</div><div class="chip-desc">Not training data — actual web pages, read and synthesised in real time.</div></div>
+    <div class="mm-chip pc-3"><span class="chip-icon">🖼️</span><div class="chip-label">Sees Images Too</div><div class="chip-desc">Upload charts, screenshots, thumbnails, photos — Claude analyses and critiques.</div></div>
+  </div>
+
+  <div class="mm-grid">
+
+    <!-- 4 SUPERPOWERS -->
+    <div class="mm-card c-bl">
+      <div class="mm-card-head"><div class="mm-card-ico">🦸</div><div><div class="mm-card-title">The Four Superpowers</div><div class="mm-card-subtitle">Beyond chatting — real-world intelligence</div></div></div>
+      <div class="four-grid">
+        <div class="four-box fb-doc">
+          <span class="fb-ico">📄</span>
+          <div class="fb-name">Document Intelligence</div>
+          <div class="fb-desc">PDFs, Excel, CSV, PowerPoint — extract insights, create visualisations</div>
+        </div>
+        <div class="four-box fb-web">
+          <span class="fb-ico">🌐</span>
+          <div class="fb-name">Web Research</div>
+          <div class="fb-desc">Searches 30+ pages, synthesises findings, cites sources — not hallucination</div>
+        </div>
+        <div class="four-box fb-img">
+          <span class="fb-ico">🖼️</span>
+          <div class="fb-name">Image Understanding</div>
+          <div class="fb-desc">Analyse thumbnails, charts, photos, screenshots — CTR critique, text extraction</div>
+        </div>
+        <div class="four-box fb-sty">
+          <span class="fb-ico">✍️</span>
+          <div class="fb-name">Writing Style</div>
+          <div class="fb-desc">Learn your voice via custom instructions — consistent tone across all outputs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENT FLOW -->
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">📊</div><div><div class="mm-card-title">How Document Analysis Works</div><div class="mm-card-subtitle">Information → Actionable Intelligence</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">1</div><span><b>Upload file</b> — drag and drop PDF, Excel, CSV, or image into the chat</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">2</div><span><b>Claude extracts</b> — reads all text, data, tables, and structure from the file</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">3</div><span><b>Add prompt</b> — give task + context + format for your specific need</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">4</div><span><b>Get insights</b> — bullet points, infographic, table, chart — Claude picks the right form</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">5</div><span><b>Iterate</b> — select any part of the output and ask for changes in place</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-am">📎 Drag & Drop</span><span class="mm-tag mm-tag-am">📊 Data Extraction</span><span class="mm-tag mm-tag-te">🔁 Iterate In-Place</span></div>
+    </div>
+
+    <!-- WEB RESEARCH -->
+    <div class="mm-card c-te">
+      <div class="mm-card-head"><div class="mm-card-ico">🌐</div><div><div class="mm-card-title">Web Research — Sequential & Deep</div><div class="mm-card-subtitle">Claude searches, reads, synthesises — just like you would</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">★</div><span><b>How it works:</b> Claude searches → reads each page → forms nodes → synthesises across all sources</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">→</div><span><b>Real example:</b> "I am looking for a laptop for video editing, compare 3 good options" — Claude searched 30 pages and presented a ranked comparison</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">→</div><span><b>vs ChatGPT:</b> Claude's web research is more thorough — it reads more pages and weights the evidence</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Not hallucination:</b> every claim comes from pages it actually read, not from training memory</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-te">🔍 Live Search</span><span class="mm-tag mm-tag-te">📖 Deep Reading</span><span class="mm-tag mm-tag-gr">✅ Cited Sources</span></div>
+    </div>
+
+    <!-- DOCUMENT WORKFLOW FLOW -->
+    <div class="mm-card c-sk mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🔄</div><div><div class="mm-card-title">Document-to-Insights Workflow — End to End</div><div class="mm-card-subtitle">From raw file upload to a shareable, actionable output</div></div></div>
+      <div class="mm-flow mm-flow-bl">
+        <div class="mm-step"><div class="mm-step-num">01</div><div class="mm-step-ico">📎</div><div class="mm-step-lbl">Upload File</div><div class="mm-step-sub">PDF, Excel, image</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#dw1"/></animateMotion></circle><path id="dw1" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">02</div><div class="mm-step-ico">🧠</div><div class="mm-step-lbl">Claude Reads</div><div class="mm-step-sub">Extracts all content</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#dw2"/></animateMotion></circle><path id="dw2" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">03</div><div class="mm-step-ico">❓</div><div class="mm-step-lbl">Asks Questions</div><div class="mm-step-sub">Goal, audience, depth</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#dw3"/></animateMotion></circle><path id="dw3" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">04</div><div class="mm-step-ico">💡</div><div class="mm-step-lbl">Extract Insights</div><div class="mm-step-sub">Top findings surfaced</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#dw4"/></animateMotion></circle><path id="dw4" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">05</div><div class="mm-step-ico">🎨</div><div class="mm-step-lbl">Visualise</div><div class="mm-step-sub">Chart, infographic, table</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#dw5"/></animateMotion></circle><path id="dw5" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">06</div><div class="mm-step-ico">📤</div><div class="mm-step-lbl">Share & Use</div><div class="mm-step-sub">Download or present</div></div>
+      </div>
+    </div>
+
+    <!-- PARALLEL TASKS -->
+    <div class="mm-card c-li">
+      <div class="mm-card-head"><div class="mm-card-ico">⚡</div><div><div class="mm-card-title">Run Multiple Tasks in Parallel</div><div class="mm-card-subtitle">Open multiple chats — Claude works on all simultaneously</div></div></div>
+      <div class="parallel-row">
+        <div class="par-task">
+          <span class="par-ico">📊</span>
+          <div class="par-status"><span class="running-dot"></span>Running</div>
+          <div class="par-desc">Analysing 50-page startup report</div>
+        </div>
+        <div class="par-task">
+          <span class="par-ico">🖼️</span>
+          <div class="par-status"><span class="running-dot"></span>Running</div>
+          <div class="par-desc">Reviewing YouTube thumbnail CTR</div>
+        </div>
+        <div class="par-task">
+          <span class="par-ico">✍️</span>
+          <div class="par-status"><span class="running-dot"></span>Running</div>
+          <div class="par-desc">Drafting investor email summary</div>
+        </div>
+      </div>
+      <div class="mm-rule" style="margin-top:13px">
+        <div class="mm-rule-icon">💡</div>
+        <div><div class="mm-rule-title">PARALLEL = MULTIPLIED PRODUCTIVITY</div><div class="mm-rule-body">While one chat analyses your data, start another for your image critique and a third for drafting. <strong>Your time no longer equals Claude's time.</strong></div></div>
+      </div>
+    </div>
+
+    <!-- WHAT WORKS BEST -->
+    <div class="mm-card c-gr">
+      <div class="mm-card-head"><div class="mm-card-ico">🏆</div><div><div class="mm-card-title">What Works Best</div><div class="mm-card-subtitle">Files that unlock the most value from Claude</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">📄</div><span><b>Research reports</b> — 50-page PDFs become 5-bullet summaries with actionable insights</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">📊</div><span><b>Excel/CSV data</b> — manufacturing data, sales reports, survey results — Claude finds patterns</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">🖼️</div><span><b>Images & thumbnails</b> — design critique, CTR optimisation, text extraction from screenshots</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">🌐</div><span><b>Web research queries</b> — compare products, analyse competitors, find latest data</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-gr">📄 PDF → Bullets</span><span class="mm-tag mm-tag-te">📊 Data → Patterns</span><span class="mm-tag mm-tag-bl">🌐 Web → Synthesis</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['PDF', 'xlsx', '→', '[]', 'ctx', 'web', 'img', '∞', '//', 'RAG'],
+    [210, 38, 22, 165, 270]
+  );
+</script>
+</body>
+</html>
