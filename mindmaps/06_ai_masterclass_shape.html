@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Masterclass — Future-Proof Yourself with SHAPE</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ── PAGE-SPECIFIC AURORA ── */
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#E8620A,transparent 70%);top:-80px;left:-90px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#6B3FD4,transparent 70%);top:38%;right:-130px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#0A7A6A,transparent 70%);bottom:-80px;left:38%}
+
+/* Badge */
+.mm-badge{background:linear-gradient(135deg,var(--or-bg),#FFF8F0);border-color:var(--or-b);color:var(--or)}
+.mm-dot{background:var(--or)}.mm-dot::after{border-color:var(--or)}
+
+/* H1 gradient */
+.mm-header h1{background-image:linear-gradient(135deg,var(--or) 0%,var(--am) 25%,var(--vi) 55%,var(--bl) 100%)}
+
+/* KPI accents */
+.mm-kpi:nth-child(1){--kpi-accent:var(--gr)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--or)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--ro)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--bl)}
+
+/* Chip accents */
+.mc-1{--chip-bg:var(--vi-bg);--chip-border:var(--vi-b);--chip-color:var(--vi)}
+.mc-1:hover{box-shadow:0 10px 26px rgba(107,63,212,.18);border-color:var(--vi)!important}
+.mc-1 .chip-label{color:var(--vi)}
+.mc-2{--chip-bg:var(--or-bg);--chip-border:var(--or-b);--chip-color:var(--or)}
+.mc-2:hover{box-shadow:0 10px 26px rgba(232,98,10,.18);border-color:var(--or)!important}
+.mc-2 .chip-label{color:var(--or)}
+.mc-3{--chip-bg:var(--gr-bg);--chip-border:var(--gr-b);--chip-color:var(--gr)}
+.mc-3:hover{box-shadow:0 10px 26px rgba(24,122,58,.18);border-color:var(--gr)!important}
+.mc-3 .chip-label{color:var(--gr)}
+
+/* Card accent maps */
+.c-ro{--c-accent:var(--ro);--c-bg:var(--ro-bg);--c-border:var(--ro-b);--c-shadow:rgba(184,24,54,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-or{--c-accent:var(--or);--c-bg:var(--or-bg);--c-border:var(--or-b);--c-shadow:rgba(232,98,10,.18)}
+.c-vi{--c-accent:var(--vi);--c-bg:var(--vi-bg);--c-border:var(--vi-b);--c-shadow:rgba(107,63,212,.18)}
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-gr{--c-accent:var(--gr);--c-bg:var(--gr-bg);--c-border:var(--gr-b);--c-shadow:rgba(24,122,58,.18)}
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+.c-sk{--c-accent:var(--sk);--c-bg:var(--sk-bg);--c-border:var(--sk-b);--c-shadow:rgba(10,110,170,.18)}
+
+/* Flow — orange theme */
+.mm-flow-or{--flow-color:var(--or);--flow-color2:var(--am);--flow-border:var(--or-b);--flow-shadow:rgba(232,98,10,.18);--flow-num-bg:var(--or-bg);--flow-num-border:var(--or-b)}
+.mm-flow-or .mm-dash{stroke:var(--or)}.mm-flow-or .mm-arrowhead{fill:var(--or)}.mm-flow-or .mm-traveldot{fill:var(--or)}.mm-flow-or .mm-step-num{color:var(--or)}
+
+/* Flow — violet theme (SHAPE steps) */
+.mm-flow-vi{--flow-color:var(--vi);--flow-color2:var(--bl);--flow-border:var(--vi-b);--flow-shadow:rgba(107,63,212,.18);--flow-num-bg:var(--vi-bg);--flow-num-border:var(--vi-b)}
+.mm-flow-vi .mm-dash{stroke:var(--vi)}.mm-flow-vi .mm-arrowhead{fill:var(--vi)}.mm-flow-vi .mm-traveldot{fill:var(--vi)}.mm-flow-vi .mm-step-num{color:var(--vi)}
+
+/* ─── SHAPE FRAMEWORK GRID ─── */
+.shape-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+@media(max-width:640px){.shape-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:380px){.shape-grid{grid-template-columns:1fr}}
+
+.shape-card{
+  border-radius:14px;padding:16px 12px;text-align:center;cursor:default;
+  position:relative;overflow:hidden;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+  animation:slideUp .5s ease both;
+}
+/* Sheen sweep on hover */
+.shape-card::after{content:'';position:absolute;top:-100%;left:-50%;width:30%;height:300%;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.22) 50%,transparent 60%);
+  transition:all .5s}
+.shape-card:hover::after{top:100%;left:120%}
+
+.sc-s{background:linear-gradient(145deg,var(--surface),var(--or-bg));border:2px solid var(--or-b);animation-delay:.05s}
+.sc-s:hover{transform:translateY(-7px) scale(1.03);box-shadow:0 12px 30px rgba(232,98,10,.22)}
+.sc-h{background:linear-gradient(145deg,var(--surface),var(--bl-bg));border:2px solid var(--bl-b);animation-delay:.10s}
+.sc-h:hover{transform:translateY(-7px) scale(1.03);box-shadow:0 12px 30px rgba(26,82,200,.22)}
+.sc-a{background:linear-gradient(145deg,var(--surface),var(--vi-bg));border:2px solid var(--vi-b);animation-delay:.15s}
+.sc-a:hover{transform:translateY(-7px) scale(1.03);box-shadow:0 12px 30px rgba(107,63,212,.22)}
+.sc-p{background:linear-gradient(145deg,var(--surface),var(--te-bg));border:2px solid var(--te-b);animation-delay:.20s}
+.sc-p:hover{transform:translateY(-7px) scale(1.03);box-shadow:0 12px 30px rgba(10,122,106,.22)}
+.sc-e{background:linear-gradient(145deg,var(--surface),var(--gr-bg));border:2px solid var(--gr-b);animation-delay:.25s}
+.sc-e:hover{transform:translateY(-7px) scale(1.03);box-shadow:0 12px 30px rgba(24,122,58,.22)}
+
+.shape-letter{
+  font-size:38px;font-weight:900;font-family:var(--fm);line-height:1;margin-bottom:5px;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);display:block;
+}
+.shape-card:hover .shape-letter{transform:scale(1.2) rotate(-6deg)}
+.sc-s .shape-letter{color:var(--or)}.sc-h .shape-letter{color:var(--bl)}
+.sc-a .shape-letter{color:var(--vi)}.sc-p .shape-letter{color:var(--te)}.sc-e .shape-letter{color:var(--gr)}
+
+.shape-word{font-size:9.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px}
+.sc-s .shape-word{color:var(--or)}.sc-h .shape-word{color:var(--bl)}
+.sc-a .shape-word{color:var(--vi)}.sc-p .shape-word{color:var(--te)}.sc-e .shape-word{color:var(--gr)}
+
+.shape-desc{font-size:10px;color:var(--muted);line-height:1.5}
+.shape-desc b{font-weight:700}
+
+/* ─── 5 HUMAN SKILLS GRID ─── */
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+@media(max-width:500px){.skills-grid{grid-template-columns:1fr}}
+
+.skill-item{
+  background:linear-gradient(145deg,var(--surface),var(--gr-bg));
+  border:1.5px solid var(--gr-b);border-radius:11px;padding:12px;
+  display:flex;align-items:flex-start;gap:10px;
+  transition:transform .3s,box-shadow .3s;cursor:default;
+}
+.skill-item:hover{transform:translateX(5px);box-shadow:0 5px 18px rgba(24,122,58,.16)}
+.skill-ico{font-size:24px;flex-shrink:0;transition:transform .3s}
+.skill-item:hover .skill-ico{transform:scale(1.22) rotate(-8deg)}
+.skill-name{font-size:12px;font-weight:800;color:var(--gr);margin-bottom:2px}
+.skill-why{font-size:10px;color:var(--muted);line-height:1.45}
+.skill-item:nth-child(5){grid-column:1/-1}
+
+/* ─── GEO vs SEO comparison ─── */
+.geo-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:500px){.geo-compare{grid-template-columns:1fr}}
+
+.geo-card{border-radius:12px;padding:14px;text-align:center;cursor:default;transition:transform .3s,box-shadow .3s}
+.geo-old{background:var(--ro-bg);border:2px solid var(--ro-b)}
+.geo-old:hover{transform:translateY(-4px);box-shadow:0 8px 22px rgba(184,24,54,.18)}
+.geo-new{background:var(--gr-bg);border:2px solid var(--gr-b)}
+.geo-new:hover{transform:translateY(-4px);box-shadow:0 8px 22px rgba(24,122,58,.18)}
+.geo-badge{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px;display:block}
+.geo-old .geo-badge{color:var(--ro)}.geo-new .geo-badge{color:var(--gr)}
+.geo-title{font-size:22px;font-weight:900;font-family:var(--fm);line-height:1.1;margin-bottom:4px}
+.geo-old .geo-title{color:var(--ro)}.geo-new .geo-title{color:var(--gr)}
+.geo-full{font-size:10px;font-weight:700;margin-bottom:5px}
+.geo-old .geo-full{color:var(--ro)}.geo-new .geo-full{color:var(--gr)}
+.geo-desc{font-size:10px;color:var(--muted);line-height:1.45}
+
+/* ─── Compare cbox (tools vs agents) ─── */
+.cbox{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;padding:13px;transition:transform .3s,box-shadow .3s}
+.cbox:hover{transform:translateY(-3px)}
+.cbox:nth-child(1){border-color:var(--ro-b)}.cbox:nth-child(1):hover{box-shadow:0 6px 18px rgba(184,24,54,.15)}
+.cbox:nth-child(2){border-color:var(--te-b)}.cbox:nth-child(2):hover{box-shadow:0 6px 18px rgba(10,122,106,.15)}
+.cbox-ico{font-size:18px;margin-bottom:5px}.cbox-title{font-size:11px;font-weight:700;margin-bottom:4px}
+.cbox:nth-child(1) .cbox-title{color:var(--ro)}.cbox:nth-child(2) .cbox-title{color:var(--te)}
+.cbox-desc{font-size:10.5px;color:var(--muted);line-height:1.45}
+
+/* ─── Two-column pitfalls ─── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:500px){.two-col{grid-template-columns:1fr}}
+
+/* ─── AI Lab block ─── */
+.lab-block{background:var(--s2);border:1.5px solid var(--te-b);border-radius:11px;padding:13px;margin-top:11px;transition:transform .3s,box-shadow .3s}
+.lab-block:hover{transform:translateY(-3px);box-shadow:0 7px 20px rgba(10,122,106,.16)}
+.lab-title{font-size:11px;font-weight:800;color:var(--te);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.lab-desc{font-size:10.5px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <!-- HEADER -->
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>AI Masterclass · SHAPE Framework · Career Strategy</div>
+    <h1>Future-Proof Yourself<br>in the Age of AI</h1>
+    <p>Tools → Agentic AI · SHAPE Survival Framework · 5 Human Skills AI Can Never Replace</p>
+  </div>
+
+  <!-- KPIs -->
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="5">0</div><div class="mm-kpi-label">Human skills AI<br>can never replace</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">SHAPE</div><div class="mm-kpi-label">The 2027<br>survival framework</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="3">0</div><div class="mm-kpi-label">Month half-life<br>of any AI skill</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="2027">0</div><div class="mm-kpi-label">Year to remain<br>relevant by</div></div>
+  </div>
+
+  <!-- CHIPS -->
+  <div class="mm-chips">
+    <div class="mm-chip mc-1"><span class="chip-icon">🤖</span><div class="chip-label">Tools → Agents Era</div><div class="chip-desc">We've moved from single-task tools to autonomous agents orchestrating multi-step workflows on autopilot.</div></div>
+    <div class="mm-chip mc-2"><span class="chip-icon">🧩</span><div class="chip-label">SHAPE Framework</div><div class="chip-desc">5 principles: SOP-Driven · Human-in-Loop · Arbitrage · Productivity & Distribution · Employability.</div></div>
+    <div class="mm-chip mc-3"><span class="chip-icon">💪</span><div class="chip-label">The Human Edge</div><div class="chip-desc">Health · Taste · Judgment · Pattern Finding · Vocabulary — 5 skills no model will ever truly replicate.</div></div>
+  </div>
+
+  <!-- GRID -->
+  <div class="mm-grid">
+
+    <!-- Tools vs Agents -->
+    <div class="mm-card c-ro">
+      <div class="mm-card-head"><div class="mm-card-ico">⚠️</div><div><div class="mm-card-title">AI Tools Are "Dumb" Alone</div><div class="mm-card-subtitle">Why single-task tools are not enough anymore</div></div></div>
+      <div class="mm-compare">
+        <div class="cbox">
+          <div class="cbox-ico">🛠️</div>
+          <div class="cbox-title">Basic AI Tools</div>
+          <div class="cbox-desc">ChatGPT, Claude, Gemini — useful in isolation, but single-task, no memory, no orchestration.</div>
+        </div>
+        <div class="cbox">
+          <div class="cbox-ico">🕸️</div>
+          <div class="cbox-title">Agentic AI</div>
+          <div class="cbox-desc">Orchestrates multiple tools, handles multi-step workflows, executes tasks fully on autopilot.</div>
+        </div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-ro">🚫 Single Task</span>
+        <span class="mm-tag mm-tag-ro">❌ No Orchestration</span>
+        <span class="mm-tag mm-tag-te">✅ Agents Solve This</span>
+      </div>
+    </div>
+
+    <!-- Intellectual Obesity -->
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">🧠</div><div><div class="mm-card-title">Intellectual Obesity</div><div class="mm-card-subtitle">The hidden danger of over-relying on AI</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Cognitive atrophy</b> — letting AI summarize, think, and create for you erodes your own capabilities over time</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>The average trap</b> — as average people think like average AI, you become average by proxy</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Lazy brain</b> — always challenge yourself with hard, novel problems to avoid mental stagnation</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>The antidote</b> — read long-form content, articulate complex thoughts, offer unique creative judgment</span></div>
+      </div>
+      <div class="mm-rule">
+        <div class="mm-rule-icon">🍺</div>
+        <div><div class="mm-rule-title">⭐ THE DRUNK INTERN RULE</div><div class="mm-rule-body">Treat AI like a <strong>drunk intern</strong> — talented but unreliable. Always validate every output, exercise judgment, and build on top with your irreplaceable human intelligence.</div></div>
+      </div>
+    </div>
+
+    <!-- SHAPE Framework — Full Width -->
+    <div class="mm-card c-or mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🧩</div><div><div class="mm-card-title">The SHAPE Framework — Your 2027 Survival Blueprint</div><div class="mm-card-subtitle">5 principles to stay employed, relevant, and irreplaceable in an AI-driven economy</div></div></div>
+      <div class="shape-grid">
+        <div class="shape-card sc-s">
+          <span class="shape-letter">S</span>
+          <div class="shape-word">SOP-Driven</div>
+          <div class="shape-desc">Document <b style="color:var(--or)">everything</b>. As AI automates technical tasks, managing repeatable SOPs becomes your primary organisational value.</div>
+        </div>
+        <div class="shape-card sc-h">
+          <span class="shape-letter">H</span>
+          <div class="shape-word">Human-in-Loop</div>
+          <div class="shape-desc">Never treat AI output as the <b style="color:var(--bl)">finish line</b>. Validate every result, exercise judgment, and build on top with human intelligence.</div>
+        </div>
+        <div class="shape-card sc-a">
+          <span class="shape-letter">A</span>
+          <div class="shape-word">Arbitrage</div>
+          <div class="shape-desc">AI skills have a <b style="color:var(--vi)">3-month half-life</b>. You're in constant learning mode. Master how to learn difficult foundational concepts fast.</div>
+        </div>
+        <div class="shape-card sc-p">
+          <span class="shape-letter">P</span>
+          <div class="shape-word">Productivity</div>
+          <div class="shape-desc">Building is no longer the moat — AI replicates it. Your edge is <b style="color:var(--te)">Trust & Distribution</b> that AI cannot buy.</div>
+        </div>
+        <div class="shape-card sc-e">
+          <span class="shape-letter">E</span>
+          <div class="shape-word">Employability</div>
+          <div class="shape-desc">Focus on <b style="color:var(--gr)">high-level problem solving</b>. Resist intellectual obesity. Stay valuable by solving what AI can't autonomously handle.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Human Skills -->
+    <div class="mm-card c-gr">
+      <div class="mm-card-head"><div class="mm-card-ico">💪</div><div><div class="mm-card-title">5 Skills AI Can Never Replace</div><div class="mm-card-subtitle">Your permanent competitive advantage — cultivate all five</div></div></div>
+      <div class="skills-grid">
+        <div class="skill-item">
+          <div class="skill-ico">❤️</div>
+          <div><div class="skill-name">Health</div><div class="skill-why">Physical & mental vitality powers creativity, resilience, and sustained performance. AI has no body.</div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-ico">🎨</div>
+          <div><div class="skill-name">Taste</div><div class="skill-why">Aesthetic judgment, cultural nuance, knowing what's actually good. AI averages; you curate.</div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-ico">⚖️</div>
+          <div><div class="skill-name">Judgment</div><div class="skill-why">High-stakes decisions with incomplete information under pressure. AI gives options; you decide.</div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-ico">🔍</div>
+          <div><div class="skill-name">Pattern Finding</div><div class="skill-why">Spotting non-obvious signals across domains — intuition from lived experience AI doesn't have.</div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-ico">📖</div>
+          <div><div class="skill-name">Vocabulary</div><div class="skill-why">Precise language shapes thinking. Those who articulate complexity fluently will always lead conversations.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Business Strategy -->
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">🏢</div><div><div class="mm-card-title">Business Strategy in the AI Era</div><div class="mm-card-subtitle">What founders and agencies should actually build</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✕</div><span><b>Avoid LLM wrappers</b> — "stupid" startups that just wrap an API around a website have zero moat</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">★</div><span><b>Find your niche</b> — solve a genuine problem in a specific industry faster, cheaper, and better with AI</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">★</div><span><b>Build an AI Lab</b> — internal team dedicated to identifying and adopting AI workflows across departments</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">★</div><span><b>AI Champions</b> — find the naturally curious employees; empower them to drive org-wide AI adoption</span></div>
+      </div>
+      <div class="geo-compare">
+        <div class="geo-card geo-old">
+          <span class="geo-badge">⬇ Fading</span>
+          <div class="geo-title">SEO</div>
+          <div class="geo-full">Search Engine Optimization</div>
+          <div class="geo-desc">Optimising for Google's crawlers and keyword rankings</div>
+        </div>
+        <div class="geo-card geo-new">
+          <span class="geo-badge">⬆ Rising</span>
+          <div class="geo-title">GEO</div>
+          <div class="geo-full">Generative Engine Optimization</div>
+          <div class="geo-desc">Getting discovered through AI-generated answers and summaries</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Evolution Flow — Full Width -->
+    <div class="mm-card c-vi mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🔄</div><div><div class="mm-card-title">The AI Evolution — Where We Are & Where It's Heading</div><div class="mm-card-subtitle">From single-task tools to agents that build other agents — the trajectory every professional must understand</div></div></div>
+      <div class="mm-flow mm-flow-or">
+        <div class="mm-step">
+          <div class="mm-step-num">01</div>
+          <div class="mm-step-ico">🛠️</div>
+          <div class="mm-step-lbl">Basic AI Tools</div>
+          <div class="mm-step-sub">ChatGPT · Claude · Gemini</div>
+        </div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#ev1"/></animateMotion></circle><path id="ev1" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step">
+          <div class="mm-step-num">02</div>
+          <div class="mm-step-ico">⚡</div>
+          <div class="mm-step-lbl">Task Automation</div>
+          <div class="mm-step-sub">Single workflow runs</div>
+        </div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#ev2"/></animateMotion></circle><path id="ev2" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step">
+          <div class="mm-step-num">03</div>
+          <div class="mm-step-ico">🤖</div>
+          <div class="mm-step-lbl">Agentic AI</div>
+          <div class="mm-step-sub">Multi-tool orchestration</div>
+        </div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#ev3"/></animateMotion></circle><path id="ev3" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step">
+          <div class="mm-step-num">04</div>
+          <div class="mm-step-ico">🕸️</div>
+          <div class="mm-step-lbl">Multi-Agent Systems</div>
+          <div class="mm-step-sub">Agents coordinate agents</div>
+        </div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#ev4"/></animateMotion></circle><path id="ev4" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step">
+          <div class="mm-step-num">05</div>
+          <div class="mm-step-ico">🏗️</div>
+          <div class="mm-step-lbl">Agents Build Agents</div>
+          <div class="mm-step-sub">Full autopilot systems</div>
+        </div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#ev5"/></animateMotion></circle><path id="ev5" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step">
+          <div class="mm-step-num">06</div>
+          <div class="mm-step-ico">📋</div>
+          <div class="mm-step-lbl">SOP-Driven Org</div>
+          <div class="mm-step-sub">Your SOPs run the system</div>
+        </div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.70s"><mpath href="#ev6"/></animateMotion></circle><path id="ev6" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step">
+          <div class="mm-step-num">07</div>
+          <div class="mm-step-ico">🏆</div>
+          <div class="mm-step-lbl">You're Irreplaceable</div>
+          <div class="mm-step-sub">SHAPE mastered → 2027 ready</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career Roadmap -->
+    <div class="mm-card c-bl">
+      <div class="mm-card-head"><div class="mm-card-ico">🎓</div><div><div class="mm-card-title">Career Roadmap & Active Learning</div><div class="mm-card-subtitle">Use AI as an accelerator, not a replacement for thinking</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>LLM aggregators</b> — use Perplexity / Gemini Deep Research to map career paths and practise active inquiry</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Understand the "why"</b> — don't outsource thinking; use AI to go deeper, never to skip understanding</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Handwritten notes</b> — watch, take handwritten notes, post them to build a public "second brain"</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>The IIT Delhi model</b> — AI allowed in exams if you submit your prompts; tests thought process, not memory</span></div>
+      </div>
+      <div class="mm-tags">
+        <span class="mm-tag mm-tag-bl">🔍 Active Inquiry</span>
+        <span class="mm-tag mm-tag-bl">✍️ Handwritten Notes</span>
+        <span class="mm-tag mm-tag-te">🧠 Second Brain</span>
+      </div>
+    </div>
+
+    <!-- Actionable Homework -->
+    <div class="mm-card c-sk">
+      <div class="mm-card-head"><div class="mm-card-ico">🚀</div><div><div class="mm-card-title">Your Actionable Homework</div><div class="mm-card-subtitle">Three things to do before your next learning session</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">1</div><span><b>Take handwritten notes</b> from this episode and post them publicly to build distribution and deepen retention</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">2</div><span><b>Use a free LLM aggregator</b> — Perplexity or Gemini Deep Research — to practise active inquiry on one topic today</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">3</div><span><b>Challenge your brain daily</b> — pick one complex topic and work through it deeply before asking AI for help</span></div>
+      </div>
+      <div class="mm-rule">
+        <div class="mm-rule-icon">🌟</div>
+        <div><div class="mm-rule-title">THE ULTIMATE INSIGHT</div><div class="mm-rule-body">AI is anxiety-inducing — but it's the <strong>greatest accelerator</strong> for those who choose to be active participants in the tech revolution, not passive consumers of it.</div></div>
+      </div>
+    </div>
+
+  </div><!-- /mm-grid -->
+</div><!-- /mm-page -->
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['SHAPE', 'SOP', 'Agent', '→', 'GEO', 'ctx', '2027', '[]', 'AI', 'LLM'],
+    [22, 38, 210, 270, 165]
+  );
+</script>
+</body>
+</html>
