@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Models & Reasoning Modes</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#6B3FD4,transparent 70%);top:-80px;left:-90px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#1A52C8,transparent 70%);top:40%;right:-120px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#0A7A6A,transparent 70%);bottom:-60px;left:33%}
+
+.mm-badge{background:linear-gradient(135deg,var(--vi-bg),#F5F3FF);border-color:var(--vi-b);color:var(--vi)}
+.mm-dot{background:var(--vi)}.mm-dot::after{border-color:var(--vi)}
+.mm-header h1{background-image:linear-gradient(135deg,var(--vi) 0%,var(--bl) 35%,var(--te) 65%,var(--gr) 100%)}
+
+.mm-kpi:nth-child(1){--kpi-accent:var(--te)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--or)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--vi)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--bl)}
+
+.pc-1{--chip-bg:var(--te-bg);--chip-border:var(--te-b);--chip-color:var(--te)}.pc-1:hover{box-shadow:0 10px 26px rgba(10,122,106,.18);border-color:var(--te)!important}
+.pc-2{--chip-bg:var(--or-bg);--chip-border:var(--or-b);--chip-color:var(--or)}.pc-2:hover{box-shadow:0 10px 26px rgba(232,98,10,.18);border-color:var(--or)!important}
+.pc-3{--chip-bg:var(--vi-bg);--chip-border:var(--vi-b);--chip-color:var(--vi)}.pc-3:hover{box-shadow:0 10px 26px rgba(107,63,212,.18);border-color:var(--vi)!important}
+
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+.c-or{--c-accent:var(--or);--c-bg:var(--or-bg);--c-border:var(--or-b);--c-shadow:rgba(232,98,10,.18)}
+.c-vi{--c-accent:var(--vi);--c-bg:var(--vi-bg);--c-border:var(--vi-b);--c-shadow:rgba(107,63,212,.18)}
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-ro{--c-accent:var(--ro);--c-bg:var(--ro-bg);--c-border:var(--ro-b);--c-shadow:rgba(184,24,54,.18)}
+.c-gr{--c-accent:var(--gr);--c-bg:var(--gr-bg);--c-border:var(--gr-b);--c-shadow:rgba(24,122,58,.18)}
+
+.mm-flow-vi{--flow-color:var(--vi);--flow-color2:var(--bl);--flow-border:var(--vi-b);--flow-shadow:rgba(107,63,212,.15);--flow-num-bg:var(--vi-bg);--flow-num-border:var(--vi-b)}
+.mm-flow-vi .mm-dash{stroke:var(--vi)}.mm-flow-vi .mm-arrowhead{fill:var(--vi)}.mm-flow-vi .mm-traveldot{fill:var(--vi)}.mm-flow-vi .mm-step-num{color:var(--vi)}
+
+/* Model 3-column spectrum */
+.model-spectrum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+@media(max-width:500px){.model-spectrum{grid-template-columns:1fr}}
+
+.model-box{border-radius:14px;padding:16px 14px;text-align:center;border:1.5px solid;transition:transform .3s,box-shadow .3s}
+.model-box:hover{transform:translateY(-4px)}
+.model-haiku{background:var(--te-bg);border-color:var(--te-b)}.model-haiku:hover{box-shadow:0 7px 22px rgba(10,122,106,.18)}
+.model-sonnet{background:var(--or-bg);border-color:var(--or-b)}.model-sonnet:hover{box-shadow:0 7px 22px rgba(232,98,10,.18)}
+.model-opus{background:var(--vi-bg);border-color:var(--vi-b)}.model-opus:hover{box-shadow:0 7px 22px rgba(107,63,212,.18)}
+
+.model-icon{font-size:22px;display:block;margin-bottom:7px;transition:transform .3s}.model-box:hover .model-icon{transform:rotate(-8deg) scale(1.18)}
+.model-name{font-size:12px;font-weight:800;margin-bottom:4px}
+.model-haiku .model-name{color:var(--te)}.model-sonnet .model-name{color:var(--or)}.model-opus .model-name{color:var(--vi)}
+.model-desc{font-size:10px;color:var(--muted);line-height:1.4;margin-bottom:7px}
+.model-badge{display:inline-block;padding:2px 9px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:.8px}
+.model-haiku .model-badge{background:var(--te-bg);border:1px solid var(--te-b);color:var(--te)}
+.model-sonnet .model-badge{background:var(--or-bg);border:1px solid var(--or-b);color:var(--or)}
+.model-opus .model-badge{background:var(--vi-bg);border:1px solid var(--vi-b);color:var(--vi)}
+
+/* Spectrum bar */
+.spectrum-bar{height:5px;background:linear-gradient(90deg,var(--te),var(--or),var(--vi));border-radius:3px;margin:8px 0 4px}
+.spectrum-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:14px}
+
+/* Thinking mode compare */
+.think-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+@media(max-width:500px){.think-compare{grid-template-columns:1fr}}
+.think-box{border-radius:12px;padding:14px;border:1.5px solid}
+.think-normal{background:var(--or-bg);border-color:var(--or-b)}.think-extended{background:var(--vi-bg);border-color:var(--vi-b)}
+.think-title{font-size:11px;font-weight:800;margin-bottom:8px}
+.think-normal .think-title{color:var(--or)}.think-extended .think-title{color:var(--vi)}
+.think-step{font-size:10.5px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.05);display:flex;gap:7px;align-items:center}
+.think-step:last-child{border:none}
+.tstep-n{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.think-normal .tstep-n{background:var(--or-bg);color:var(--or);border:1px solid var(--or-b)}
+.think-extended .tstep-n{background:var(--vi-bg);color:var(--vi);border:1px solid var(--vi-b)}
+</style>
+</head>
+<body>
+
+<div class="aurora"><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div></div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>Chapter 2 · Claude AI Crash Course</div>
+    <h1>Claude Models &amp;<br>Reasoning Modes</h1>
+    <p>Match the model to the task — Haiku for speed, Sonnet for everyday, Opus for deep thinking</p>
+  </div>
+
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="3">0</div><div class="mm-kpi-label">Claude model tiers:<br>Haiku / Sonnet / Opus</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">2×</div><div class="mm-kpi-label">Reasoning modes:<br>Normal + Extended</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">Opus</div><div class="mm-kpi-label">Most tokens consumed:<br>use wisely</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">🎯</div><div class="mm-kpi-label">Rule: match model<br>to task complexity</div></div>
+  </div>
+
+  <div class="mm-chips">
+    <div class="mm-chip pc-1"><span class="chip-icon">⚡</span><div class="chip-label">Haiku: Speed First</div><div class="chip-desc">Fastest, cheapest. Perfect for quick answers, summaries, and real-time tasks.</div></div>
+    <div class="mm-chip pc-2"><span class="chip-icon">⚖️</span><div class="chip-label">Sonnet: The Default</div><div class="chip-desc">Balanced intelligence and speed. Best for most everyday work tasks.</div></div>
+    <div class="mm-chip pc-3"><span class="chip-icon">🧠</span><div class="chip-label">Opus: Deep Thinking</div><div class="chip-desc">Most powerful. Complex coding, strategy, long document analysis.</div></div>
+  </div>
+
+  <div class="mm-grid">
+
+    <!-- MODEL SPECTRUM -->
+    <div class="mm-card c-or mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">⚡</div><div><div class="mm-card-title">Claude Models — Speed vs Intelligence Spectrum</div><div class="mm-card-subtitle">Choose your model based on task complexity</div></div></div>
+      <div class="spectrum-bar"></div>
+      <div class="spectrum-labels"><span>⚡ Fast / Efficient</span><span>🧠 Deep Intelligence</span></div>
+      <div class="model-spectrum">
+        <div class="model-box model-haiku">
+          <span class="model-icon">⚡</span>
+          <div class="model-name">Claude Haiku</div>
+          <div class="model-desc">Fastest response time · Optimised for simple tasks · Low cost / high efficiency · Real-time workloads</div>
+          <span class="model-badge">SIMPLE TASKS</span>
+        </div>
+        <div class="model-box model-sonnet">
+          <span class="model-icon">⚖️</span>
+          <div class="model-name">Claude Sonnet</div>
+          <div class="model-desc">Balanced intelligence & speed · Strong reasoning · Handles long context · Best for everyday work</div>
+          <span class="model-badge">EVERYDAY DEFAULT</span>
+        </div>
+        <div class="model-box model-opus">
+          <span class="model-icon">🧠</span>
+          <div class="model-name">Claude Opus</div>
+          <div class="model-desc">Most capable model · Deep reasoning & planning · Strong coding & analysis · Complex problems</div>
+          <span class="model-badge">COMPLEX REASONING</span>
+        </div>
+      </div>
+      <div class="mm-tags" style="margin-top:13px"><span class="mm-tag mm-tag-te">⚡ Haiku: Quick Answers</span><span class="mm-tag mm-tag-or">⚖️ Sonnet: Research, Writing</span><span class="mm-tag mm-tag-vi">🧠 Opus: Strategy, Agents</span></div>
+    </div>
+
+    <!-- EXTENDED THINKING -->
+    <div class="mm-card c-vi">
+      <div class="mm-card-head"><div class="mm-card-ico">🧠</div><div><div class="mm-card-title">Extended Thinking Mode</div><div class="mm-card-subtitle">Claude spends more time reasoning before answering</div></div></div>
+      <div class="think-compare">
+        <div class="think-box think-normal">
+          <div class="think-title">⚡ Normal Mode</div>
+          <div class="think-step"><span class="tstep-n">1</span>Receive prompt</div>
+          <div class="think-step"><span class="tstep-n">2</span>Quick prediction</div>
+          <div class="think-step"><span class="tstep-n">3</span>Return answer</div>
+        </div>
+        <div class="think-box think-extended">
+          <div class="think-title">🧠 Extended Mode</div>
+          <div class="think-step"><span class="tstep-n">1</span>Receive prompt</div>
+          <div class="think-step"><span class="tstep-n">2</span>Reasoning steps</div>
+          <div class="think-step"><span class="tstep-n">3</span>Self-evaluation</div>
+          <div class="think-step"><span class="tstep-n">4</span>Return answer</div>
+        </div>
+      </div>
+      <div class="mm-tags" style="margin-top:13px"><span class="mm-tag mm-tag-vi">🐢 Slower</span><span class="mm-tag mm-tag-vi">🎯 Smarter</span><span class="mm-tag mm-tag-or">🧩 Multi-step problems</span></div>
+    </div>
+
+    <!-- WHEN TO USE WHICH -->
+    <div class="mm-card c-te">
+      <div class="mm-card-head"><div class="mm-card-ico">🎯</div><div><div class="mm-card-title">Model Selection Rules</div><div class="mm-card-subtitle">Practical guide to choosing the right tier</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">⚡</div><span><b>Haiku →</b> Quick answers, summarisation, real-time chat assistants, automation at scale</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">⚖️</div><span><b>Sonnet →</b> Research, writing, analysis, coding, everyday tasks. The 80% default.</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">🧠</div><span><b>Opus →</b> Complex coding, strategy planning, long document analysis, AI agent work</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">💡</div><span><b>Extended Thinking →</b> debugging code, designing systems, research analysis, deep problems</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">⚠️</div><span><b>Opus token warning:</b> consumes usage faster than any other model — use deliberately</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-te">📊 Match Task</span><span class="mm-tag mm-tag-or">⚠️ Opus = Tokens</span><span class="mm-tag mm-tag-vi">🧠 Think Extended</span></div>
+    </div>
+
+    <!-- HOW CLAUDE PROCESSES -->
+    <div class="mm-card c-bl mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🔄</div><div><div class="mm-card-title">How Claude Processes Any Task — End to End</div><div class="mm-card-subtitle">User Prompt → Model → Optional Thinking → Structured Output</div></div></div>
+      <div class="mm-flow mm-flow-vi">
+        <div class="mm-step"><div class="mm-step-num">01</div><div class="mm-step-ico">💬</div><div class="mm-step-lbl">User Prompt</div><div class="mm-step-sub">Task + context</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#mr1"/></animateMotion></circle><path id="mr1" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">02</div><div class="mm-step-ico">⚙️</div><div class="mm-step-lbl">Select Model</div><div class="mm-step-sub">Haiku/Sonnet/Opus</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#mr2"/></animateMotion></circle><path id="mr2" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">03</div><div class="mm-step-ico">🧠</div><div class="mm-step-lbl">Think Mode</div><div class="mm-step-sub">Normal or extended</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#mr3"/></animateMotion></circle><path id="mr3" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">04</div><div class="mm-step-ico">🔍</div><div class="mm-step-lbl">Reasoning</div><div class="mm-step-sub">Steps + evaluation</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#mr4"/></animateMotion></circle><path id="mr4" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">05</div><div class="mm-step-ico">✅</div><div class="mm-step-lbl">Clear Answer</div><div class="mm-step-sub">Structured output</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#mr5"/></animateMotion></circle><path id="mr5" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">06</div><div class="mm-step-ico">🔁</div><div class="mm-step-lbl">Iterate</div><div class="mm-step-sub">Refine & improve</div></div>
+      </div>
+    </div>
+
+    <!-- MODEL USE CASES -->
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">📋</div><div><div class="mm-card-title">Real-World Use Case Examples</div><div class="mm-card-subtitle">Which model fits which real job</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">⚡</div><span><b>Customer support bot</b> → Haiku (fast, cheap, simple Q&A at scale)</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">⚖️</div><span><b>Writing a blog post</b> → Sonnet (research + write + edit, everyday quality)</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">⚖️</div><span><b>Analysing a PDF report</b> → Sonnet (good reasoning, long context handling)</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">🧠</div><span><b>Designing a microservices architecture</b> → Opus + Extended Thinking</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">🧠</div><span><b>Autonomous AI agent work</b> → Opus (complex multi-step planning required)</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-am">🤖 Automation → Haiku</span><span class="mm-tag mm-tag-or">📝 Work → Sonnet</span><span class="mm-tag mm-tag-vi">🏗️ Complex → Opus</span></div>
+    </div>
+
+    <!-- PITFALLS -->
+    <div class="mm-card c-ro">
+      <div class="mm-card-head"><div class="mm-card-ico">⚠️</div><div><div class="mm-card-title">Common Model Selection Mistakes</div><div class="mm-card-subtitle">Avoid these to save tokens and get better results</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Using Opus for everything</b> — wastes tokens quickly, Sonnet handles 80% of tasks just as well</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Haiku for complex reasoning</b> — lightweight model for deep planning degrades quality</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Ignoring extended thinking</b> — for multi-step or ambiguous problems, it's a game-changer</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Not checking usage limits</b> — Opus hits limits faster; check settings → usage before meetings</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-ro">🚫 Opus Overuse</span><span class="mm-tag mm-tag-ro">📉 Wrong Tier</span><span class="mm-tag mm-tag-am">📊 Check Usage</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['Haiku', 'Opus', 'Sonnet', '→', 'think', '[]', 'ctx', 'LLM', 'fn()', '∞'],
+    [165, 210, 270, 22, 38]
+  );
+</script>
+</body>
+</html>

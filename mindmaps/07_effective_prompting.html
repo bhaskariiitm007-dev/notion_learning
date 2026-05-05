@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Effective Prompting & Iteration</title>
+<link rel="stylesheet" href="shared/base.css">
+<style>
+.aurora-blob:nth-child(1){background:radial-gradient(circle,#0A7A6A,transparent 70%);top:-80px;left:-80px}
+.aurora-blob:nth-child(2){background:radial-gradient(circle,#187A3A,transparent 70%);top:40%;right:-120px}
+.aurora-blob:nth-child(3){background:radial-gradient(circle,#C07B00,transparent 70%);bottom:-60px;left:35%}
+
+.mm-badge{background:linear-gradient(135deg,var(--te-bg),#F0FBFA);border-color:var(--te-b);color:var(--te)}
+.mm-dot{background:var(--te)}.mm-dot::after{border-color:var(--te)}
+.mm-header h1{background-image:linear-gradient(135deg,var(--te) 0%,var(--gr) 35%,var(--am) 65%,var(--or) 100%)}
+
+.mm-kpi:nth-child(1){--kpi-accent:var(--te)}
+.mm-kpi:nth-child(2){--kpi-accent:var(--gr)}
+.mm-kpi:nth-child(3){--kpi-accent:var(--am)}
+.mm-kpi:nth-child(4){--kpi-accent:var(--or)}
+
+.pc-1{--chip-bg:var(--te-bg);--chip-border:var(--te-b);--chip-color:var(--te)}.pc-1:hover{box-shadow:0 10px 26px rgba(10,122,106,.18);border-color:var(--te)!important}
+.pc-2{--chip-bg:var(--gr-bg);--chip-border:var(--gr-b);--chip-color:var(--gr)}.pc-2:hover{box-shadow:0 10px 26px rgba(24,122,58,.18);border-color:var(--gr)!important}
+.pc-3{--chip-bg:var(--am-bg);--chip-border:var(--am-b);--chip-color:var(--am)}.pc-3:hover{box-shadow:0 10px 26px rgba(192,123,0,.18);border-color:var(--am)!important}
+
+.c-te{--c-accent:var(--te);--c-bg:var(--te-bg);--c-border:var(--te-b);--c-shadow:rgba(10,122,106,.18)}
+.c-gr{--c-accent:var(--gr);--c-bg:var(--gr-bg);--c-border:var(--gr-b);--c-shadow:rgba(24,122,58,.18)}
+.c-am{--c-accent:var(--am);--c-bg:var(--am-bg);--c-border:var(--am-b);--c-shadow:rgba(192,123,0,.18)}
+.c-or{--c-accent:var(--or);--c-bg:var(--or-bg);--c-border:var(--or-b);--c-shadow:rgba(232,98,10,.18)}
+.c-bl{--c-accent:var(--bl);--c-bg:var(--bl-bg);--c-border:var(--bl-b);--c-shadow:rgba(26,82,200,.18)}
+.c-vi{--c-accent:var(--vi);--c-bg:var(--vi-bg);--c-border:var(--vi-b);--c-shadow:rgba(107,63,212,.18)}
+.c-ro{--c-accent:var(--ro);--c-bg:var(--ro-bg);--c-border:var(--ro-b);--c-shadow:rgba(184,24,54,.18)}
+
+.mm-flow-te{--flow-color:var(--te);--flow-color2:var(--gr);--flow-border:var(--te-b);--flow-shadow:rgba(10,122,106,.15);--flow-num-bg:var(--te-bg);--flow-num-border:var(--te-b)}
+.mm-flow-te .mm-dash{stroke:var(--te)}.mm-flow-te .mm-arrowhead{fill:var(--te)}.mm-flow-te .mm-traveldot{fill:var(--te)}.mm-flow-te .mm-step-num{color:var(--te)}
+
+/* TCF formula grid */
+.tcf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+@media(max-width:500px){.tcf-grid{grid-template-columns:1fr}}
+.tcf-box{border-radius:13px;padding:16px;text-align:center;transition:transform .3s,box-shadow .3s}
+.tcf-box:hover{transform:translateY(-4px)}
+.tcf-t{background:var(--ro-bg);border:1.5px solid var(--ro-b)}.tcf-t:hover{box-shadow:0 7px 20px rgba(184,24,54,.15)}
+.tcf-c{background:var(--gr-bg);border:1.5px solid var(--gr-b)}.tcf-c:hover{box-shadow:0 7px 20px rgba(24,122,58,.15)}
+.tcf-f{background:var(--bl-bg);border:1.5px solid var(--bl-b)}.tcf-f:hover{box-shadow:0 7px 20px rgba(26,82,200,.15)}
+.tcf-letter{font-size:40px;font-weight:900;line-height:1;opacity:.18;font-family:var(--fm)}
+.tcf-t .tcf-letter{color:var(--ro)}.tcf-c .tcf-letter{color:var(--gr)}.tcf-f .tcf-letter{color:var(--bl)}
+.tcf-label{font-size:12px;font-weight:800;margin:4px 0}
+.tcf-t .tcf-label{color:var(--ro)}.tcf-c .tcf-label{color:var(--gr)}.tcf-f .tcf-label{color:var(--bl)}
+.tcf-example{font-size:10.5px;color:var(--muted);line-height:1.45;font-style:italic}
+
+/* Before/After prompt compare */
+.ba-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+@media(max-width:500px){.ba-row{grid-template-columns:1fr}}
+.ba-box{border-radius:11px;padding:13px;border:1.5px solid}
+.ba-bad{background:var(--ro-bg);border-color:var(--ro-b)}.ba-good{background:var(--gr-bg);border-color:var(--gr-b)}
+.ba-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.ba-bad .ba-title{color:var(--ro)}.ba-good .ba-title{color:var(--gr)}
+.ba-prompt{font-size:10.5px;font-family:var(--fm);background:rgba(0,0,0,.04);border-radius:7px;padding:9px;line-height:1.6;color:var(--text)}
+</style>
+</head>
+<body>
+
+<div class="aurora"><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div></div>
+<div class="noise"></div>
+<canvas id="mm-canvas"></canvas>
+
+<div class="mm-page">
+
+  <div class="mm-header">
+    <div class="mm-badge"><span class="mm-dot"></span>Chapter 3 · Claude AI Crash Course</div>
+    <h1>Effective Prompting<br>&amp; Iteration</h1>
+    <p>Task + Context + Format = Clear Insights — and the art of refining until perfect</p>
+  </div>
+
+  <div class="mm-kpi-row">
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="3">0</div><div class="mm-kpi-label">Prompt components:<br>Task · Context · Format</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">T+C+F</div><div class="mm-kpi-label">The golden formula<br>for every prompt</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">🔁</div><div class="mm-kpi-label">Iteration: refine,<br>don't restart</div></div>
+    <div class="mm-kpi"><div class="mm-kpi-val" data-count="skip">✓</div><div class="mm-kpi-label">Custom instructions<br>= your permanent context</div></div>
+  </div>
+
+  <div class="mm-chips">
+    <div class="mm-chip pc-1"><span class="chip-icon">📝</span><div class="chip-label">Task First</div><div class="chip-desc">Start every prompt by naming the job: Analyse / Compare / Summarise / Write.</div></div>
+    <div class="mm-chip pc-2"><span class="chip-icon">🧩</span><div class="chip-label">Context is Power</div><div class="chip-desc">Claude performs dramatically better with real background info. Give it everything relevant.</div></div>
+    <div class="mm-chip pc-3"><span class="chip-icon">🎨</span><div class="chip-label">Format the Output</div><div class="chip-desc">Tell Claude exactly how you want the answer: bullet points, table, 3 sentences, JSON.</div></div>
+  </div>
+
+  <div class="mm-grid">
+
+    <!-- TCF FORMULA -->
+    <div class="mm-card c-te mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🎯</div><div><div class="mm-card-title">The Prompt Formula — Task · Context · Format</div><div class="mm-card-subtitle">Three components that turn vague requests into clear insights</div></div></div>
+      <div class="tcf-grid">
+        <div class="tcf-box tcf-t">
+          <div class="tcf-letter">T</div>
+          <div class="tcf-label">Task</div>
+          <div class="tcf-example">"Analyse this customer feedback dataset and identify the top 5 issues"</div>
+        </div>
+        <div class="tcf-box tcf-c">
+          <div class="tcf-letter">C</div>
+          <div class="tcf-label">Context</div>
+          <div class="tcf-example">"This is a survey from 500 users collected after our product launch in Q3"</div>
+        </div>
+        <div class="tcf-box tcf-f">
+          <div class="tcf-letter">F</div>
+          <div class="tcf-label">Format</div>
+          <div class="tcf-example">"Return top 5 insights in bullet points with 2-sentence explanation each"</div>
+        </div>
+      </div>
+      <div class="mm-rule" style="margin-top:14px">
+        <div class="mm-rule-icon">💡</div>
+        <div><div class="mm-rule-title">⭐ UNCLEAR PROMPT → CLAUDE AI → CLEAR INSIGHTS</div><div class="mm-rule-body">AI relies on the <strong>clarity of the request</strong>. The same task with proper T+C+F gives 10× better output than a vague one-liner.</div></div>
+      </div>
+    </div>
+
+    <!-- BEFORE / AFTER -->
+    <div class="mm-card c-gr">
+      <div class="mm-card-head"><div class="mm-card-ico">✏️</div><div><div class="mm-card-title">Bad vs Good Prompt</div><div class="mm-card-subtitle">See the difference context makes</div></div></div>
+      <div class="ba-row">
+        <div class="ba-box ba-bad">
+          <div class="ba-title">✕ Unclear Prompt</div>
+          <div class="ba-prompt">"Analyse this dataset"</div>
+          <div style="font-size:10px;color:var(--ro);margin-top:7px">Missing context — Claude guesses at your goal</div>
+        </div>
+        <div class="ba-box ba-good">
+          <div class="ba-title">✓ Structured Prompt</div>
+          <div class="ba-prompt">"You are a senior data analyst. Analyse this gelatin production dataset. Extract the top 3 factors affecting quality. Return findings in a table with confidence levels."</div>
+        </div>
+      </div>
+      <div class="mm-tags" style="margin-top:13px"><span class="mm-tag mm-tag-gr">🎯 Specific Task</span><span class="mm-tag mm-tag-gr">🧩 Real Context</span><span class="mm-tag mm-tag-gr">📐 Clear Format</span></div>
+    </div>
+
+    <!-- CUSTOM INSTRUCTIONS -->
+    <div class="mm-card c-am">
+      <div class="mm-card-head"><div class="mm-card-ico">⚙️</div><div><div class="mm-card-title">Custom Instructions — Your Permanent Context</div><div class="mm-card-subtitle">Set once, applies to every chat automatically</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>What it is:</b> a set of rules Claude follows in every chat by default</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Professional setting:</b> "Always be professional. Ask about goal, audience, format before responding."</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Research mode:</b> "Always web search first. Cite sources. Keep responses under 300 words."</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Power tip:</b> use another AI to write your custom instructions for you — describe your work and let it draft them</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-am">📋 Set Once</span><span class="mm-tag mm-tag-am">♾️ Always Active</span><span class="mm-tag mm-tag-te">🎓 Trains Claude</span></div>
+    </div>
+
+    <!-- ITERATION FLOW -->
+    <div class="mm-card c-or mm-full">
+      <div class="mm-card-head"><div class="mm-card-ico">🔁</div><div><div class="mm-card-title">The Iteration Loop — Refine, Don't Restart</div><div class="mm-card-subtitle">The real superpower: select → reply → improve</div></div></div>
+      <div class="mm-flow mm-flow-te">
+        <div class="mm-step"><div class="mm-step-num">01</div><div class="mm-step-ico">💭</div><div class="mm-step-lbl">First Prompt</div><div class="mm-step-sub">Task + basic context</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0s"><mpath href="#it1"/></animateMotion></circle><path id="it1" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">02</div><div class="mm-step-ico">🤖</div><div class="mm-step-lbl">Claude Responds</div><div class="mm-step-sub">May ask questions</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.14s"><mpath href="#it2"/></animateMotion></circle><path id="it2" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">03</div><div class="mm-step-ico">👀</div><div class="mm-step-lbl">Review Output</div><div class="mm-step-sub">Read the result</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.28s"><mpath href="#it3"/></animateMotion></circle><path id="it3" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">04</div><div class="mm-step-ico">🖱️</div><div class="mm-step-lbl">Select Text</div><div class="mm-step-sub">Highlight the part</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.42s"><mpath href="#it4"/></animateMotion></circle><path id="it4" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">05</div><div class="mm-step-ico">💬</div><div class="mm-step-lbl">Click Reply</div><div class="mm-step-sub">Add refinement note</div></div>
+        <div class="mm-arrow"><svg viewBox="0 0 30 14"><line x1="0" y1="7" x2="22" y2="7" class="mm-dash"/><polygon points="20,3 30,7 20,11" class="mm-arrowhead"/><circle r="2.2" class="mm-traveldot"><animateMotion dur="1s" repeatCount="indefinite" begin="0.56s"><mpath href="#it5"/></animateMotion></circle><path id="it5" d="M0,7 L20,7" fill="none"/></svg></div>
+        <div class="mm-step"><div class="mm-step-num">06</div><div class="mm-step-ico">✨</div><div class="mm-step-lbl">10× Better</div><div class="mm-step-sub">Dramatically improved</div></div>
+      </div>
+    </div>
+
+    <!-- CLAUDE ASKS BACK -->
+    <div class="mm-card c-bl">
+      <div class="mm-card-head"><div class="mm-card-ico">❓</div><div><div class="mm-card-title">Claude Asks You Questions</div><div class="mm-card-subtitle">A clarifying AI is a better AI</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Why it happens:</b> custom instructions can tell Claude to ask for goal, audience, format before answering</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>It offers choices:</b> Claude gives you multiple options to select from, not just open questions</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Benefit:</b> someone with zero AI experience can pick from options and still get great results</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">✓</div><span><b>Pro tip:</b> answer the clarifying questions thoroughly — this is where real quality comes from</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-bl">💬 Clarifying Loop</span><span class="mm-tag mm-tag-bl">🎯 Better Results</span><span class="mm-tag mm-tag-te">✅ Options Provided</span></div>
+    </div>
+
+    <!-- PITFALLS -->
+    <div class="mm-card c-ro">
+      <div class="mm-card-head"><div class="mm-card-ico">⚠️</div><div><div class="mm-card-title">Common Prompting Mistakes</div><div class="mm-card-subtitle">What kills output quality before you start</div></div></div>
+      <div class="mm-items">
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>No context:</b> "Analyse this dataset" with no background leaves Claude guessing</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>No format:</b> you get an essay when you wanted 3 bullet points</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>No role:</b> assigning a persona ("you are a senior analyst") dramatically improves output depth</span></div>
+        <div class="mm-item"><div class="mm-dot-badge">!</div><span><b>Restarting instead of refining:</b> select the specific part to improve and reply to that section</span></div>
+      </div>
+      <div class="mm-tags"><span class="mm-tag mm-tag-ro">🚫 Vague Prompts</span><span class="mm-tag mm-tag-ro">📐 No Format</span><span class="mm-tag mm-tag-am">🔁 Refine Not Restart</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="shared/mindmap.js"></script>
+<script>
+  MindMap.init(
+    ['T+C+F', 'prompt', '→', '[]', 'ctx', 'fn()', 'iter', '∞', 'ask', '✓'],
+    [165, 38, 22, 210, 270]
+  );
+</script>
+</body>
+</html>
